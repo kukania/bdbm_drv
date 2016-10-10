@@ -111,10 +111,8 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	bdbm_llm_req_t* lr = NULL;
 	uint64_t i = 0, j = 0, sp_ofs;
 	uint64_t c=0;
-	bdbm_blkio_req_t* br =(bdbm_blkio_req_t*)hr->blkio_req;
+	bdbm_blkio_req_t* br =(bdbm_blkio_req_t*)hr->blkio_req[0]; //must be changed!
 
-	bdbm_msg("blkio_req->cnt : %lld", br->bi_bvec_cnt);
-	bdbm_msg("hlm->nr_llm_reqs : %lld", hr->nr_llm_reqs);
 	/* perform mapping with the FTL */
 	bdbm_hlm_for_each_llm_req (lr, hr, i) {
 		bdbm_msg("hlm_for_each_llm_req : %lld",c++);
@@ -198,6 +196,7 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 
 fail:
 	return 1;
+	
 }
 
 /* TODO: it must be more general... */
@@ -266,10 +265,10 @@ uint32_t hlm_nobuf_make_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	}
 #endif
 
-	bdbm_msg("hlm_nobuf_make_req");
+//	bdbm_msg("hlm_nobuf_make_req");
 	/* perform i/o */
 	if (bdbm_is_trim (hr->req_type)) {
-		bdbm_msg("make_req call make_trim_req");
+//		bdbm_msg("make_req call make_trim_req");
 		if ((ret = __hlm_nobuf_make_trim_req (bdi, hr)) == 0) {
 			/* call 'ptr_host_inf->end_req' directly */
 			bdi->ptr_host_inf->end_req (bdi, hr);
@@ -278,8 +277,8 @@ uint32_t hlm_nobuf_make_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	} else {
 		/* do we need to do garbage collection? */
 
-		bdbm_msg("make_req call make_rw_req");
-		__hlm_nobuf_check_ondemand_gc (bdi, hr);
+		__hlm_nobuf_check_ondemand_gc (bdi, hr);   
+	
 		
 		ret = __hlm_nobuf_make_rw_req (bdi, hr);
 	} 

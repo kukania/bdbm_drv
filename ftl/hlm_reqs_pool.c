@@ -171,6 +171,7 @@ again:
 
 	/* oops! there are no free items in the free-list */
 	if (item == NULL) {
+		bdbm_msg("***ADD MORE HLM_REQ***");
 		int i = 0;
 		/* add more items to the free-list */
 		for (i = 0; i < DEFAULT_POOL_INC_SIZE; i++) {
@@ -200,6 +201,7 @@ again:
 	//initialize hr
 	item->nr_blkio_req = 0;
 	item->nr_charged = 0;
+	item->nr_llm_reqs=1;
 
 	bdbm_spin_unlock (&pool->lock);
 	return item;
@@ -324,13 +326,26 @@ static int __hlm_reqs_pool_add_write_req(
 	bdbm_hlm_req_t * hr,
 	bdbm_blkio_req_t* br)
 {
-	uint64_t nr_remain_page = 4 - hr->nr_charged; //number of remain page
+
+	uint64_t sec_start, sec_end, pg_start, pg_end;
+	uint64_t nr_charged = hr->nr_charged;
+	uint64_t nr_remain_page = 4 - nr_charged; //number of remain page
 	uint64_t nr_add = br->bi_bvec_cnt; // number of to add
 	uint64_t bvec_index = br->bi_bvec_index;
 	uint64_t i,ret;
+	uint8_t last=0; // last of current blk;
 
 	bdbm_llm_req_t* ptr_lr = &hr->llm_reqs[0]; // need only one llm
 	bdbm_flash_page_main_t* ptr_fm = &ptr_lr->fmain;
+
+	sec_start = BDBM_ALIGN_DOWN(br->bi_offset, NR_KSECTORS_IN(pool->map_unit));
+//	bdbm_msg("bi_offset %d, sec_start %d, nr_ksector %d", br->bi_offset, sec_start, NR_KSECTORS_IN(pool->map_unit));
+	sec_end = BDBM_ALIGN_UP(br->bi_offset+ br->bi_size, NR_KSECTORS_IN(pool->map_unit));
+	bdbm_bug_on (sec_start >= sec_end);
+
+	pg_start = BDBM_ALIGN_DOWN (br->bi_offset, NR_KSECTORS_IN(KPAGE_SIZE)) / NR_KSECTORS_IN(KPAGE_SIZE);
+	pg_end = BDBM_ALIGN_UP (br->bi_offset + br->bi_size, NR_KSECTORS_IN(KPAGE_SIZE)) / NR_KSECTORS_IN(KPAGE_SIZE);
+	bdbm_bug_on (pg_start >= pg_end);
 
 	//initialized empty page
 	if(nr_remain_page==4) {
@@ -340,19 +355,38 @@ static int __hlm_reqs_pool_add_write_req(
 
 	if(nr_add > nr_remain_page) {
 		ret = nr_remain_page;
-		for(i=nr_remain_page; i<4; i++) {
+		for(i=nr_charged; i<4; i++) {
+			ptr_lr->logaddr.lpa[i] = sec_start/ NR_KSECTORS_IN(pool->map_unit); 
 			ptr_fm->kp_stt[i] = KP_STT_DATA;
 			ptr_fm->kp_ptr[i] = br->bi_bvec_ptr[bvec_index++];
+
+			sec_start += NR_KSECTORS_IN(KPAGE_SIZE);
 		}
 	} else {
 		ret = nr_add;
-		for(i=0; i<nr_add; i++) {
+		last = 1;
+		for(i=nr_charged; i<nr_charged+nr_add; i++) {
+			ptr_lr->logaddr.lpa[i] = sec_start/ NR_KSECTORS_IN(pool->map_unit);
 			ptr_fm->kp_stt[i] = KP_STT_DATA;
 			ptr_fm->kp_ptr[i] = br->bi_bvec_ptr[bvec_index++];
+
+			sec_start += NR_KSECTORS_IN(KPAGE_SIZE);
 		}
 	}
 
-	//hr->bio[hr->nr_blkio_req] = br; <-add
+	ptr_lr->req_type = br->bi_rw; // decide the reqtype for llm_req
+	ptr_lr->ptr_hlm_req = (void*)hr;
+
+	hr->req_type = br->bi_rw; // hr request type
+	hr->blkio_req[hr->nr_blkio_req++] = br;// 
+	hr->nr_charged += ret;
+
+
+	if(last==1) {
+		hr->last_blkio_req = hr->nr_blkio_req;
+		bdbm_msg("Last blkio_req [%d]", hr->last_blkio_req);
+	}
+
 
 	return ret;
 
@@ -543,6 +577,8 @@ int bdbm_hlm_reqs_pool_build_req (
 
 void hlm_reqs_pool_relocate_kp (bdbm_llm_req_t* lr, uint64_t new_sp_ofs)
 {
+
+	// what it mean?
 	if (new_sp_ofs != lr->logaddr.ofs) {
 		lr->fmain.kp_stt[new_sp_ofs] = KP_STT_DATA;
 		lr->fmain.kp_ptr[new_sp_ofs] = lr->fmain.kp_ptr[lr->logaddr.ofs];
