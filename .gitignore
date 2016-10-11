@@ -5,3 +5,5 @@
 *.o
 *.so
 libftl
+
+*.txt
