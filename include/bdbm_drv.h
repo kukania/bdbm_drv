@@ -145,6 +145,8 @@ typedef struct {
 	uint64_t bi_bvec_cnt; /* unit: kernel-page (4KB); it must be equal to 'bi_size / 8' */
 	uint64_t bi_bvec_index; /* must initialized 0, index of bvec_ptr[index]*/
 	uint8_t* bi_bvec_ptr[BDBM_BLKIO_MAX_VECS]; /* an array of 4 KB data for bvec */
+	
+	atomic64_t reqs_done; //number of done request count
 
 	uint8_t ret; /* a return value will be kept here */
 	void* bio; /* reserved for kernel's bio requests */
@@ -223,8 +225,8 @@ typedef struct {
 	};
 
 	void* blkio_req[4];
+	uint8_t nr_pages_blk[4];	
 	uint8_t nr_blkio_req; /* number of blkio*/
-	uint8_t last_blkio_req;
 	uint8_t nr_charged; /* How many subpage charged*/
 	uint8_t ret;
 } bdbm_hlm_req_t;

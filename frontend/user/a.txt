@@ -1,0 +1,848 @@
+bdbm: dm_user_open is initialized
+bdbm: new thread created: 0x10bd2a0
+bdbm: =====================================================================
+bdbm: DEVICE PARAMETERS
+bdbm: =====================================================================
+bdbm: # of channels = 64
+bdbm: # of chips per channel = 4
+bdbm: # of blocks per chip = 128
+bdbm: # of pages per block = 64
+bdbm: # of subpages per page = 4
+bdbm: page main size  = 16384 bytes
+bdbm: page oob size = 0 bytes
+bdbm: device type = 5 (1: ramdrv, 2: ramdrive (intr), 3: ramdrive (timing), 4: BlueDBM, 5: libdummy, 6: libramdrive)
+bdbm: 
+bdbm: =====================================================================
+bdbm: FTL CONFIGURATION
+bdbm: =====================================================================
+bdbm: mapping type = 4 (1: no ftl, 2: block-mapping, 3: RSD, 4: page-mapping, 5: dftl)
+bdbm: gc policy = 3 (1: merge 2: random, 3: greedy, 4: cost-benefit)
+bdbm: wl policy = 1 (1: none, 2: swap)
+bdbm: trim mode = 1 (1: enable, 2: disable)
+bdbm: kernel sector = 512 bytes
+bdbm: 
+bdbm: [bdbm_drv_main] bdbm_drv is registered!
+WS,8653832,8
+bdbm: req_size 1
+WS,8653840,8
+bdbm: req_size 2
+WS,8653848,8
+bdbm: req_size 3
+WS,8653856,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081729, ofs=0, phy:: ch=0, chip=0, block=0, page_no=0, k=0
+logaddr=1081730, ofs=0, phy:: ch=0, chip=0, block=0, page_no=0, k=1
+logaddr=1081731, ofs=0, phy:: ch=0, chip=0, block=0, page_no=0, k=2
+logaddr=1081732, ofs=0, phy:: ch=0, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8653864,8
+bdbm: req_size 1
+WS,8653872,8
+bdbm: req_size 2
+WS,8653880,8
+bdbm: req_size 3
+WS,8653888,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081733, ofs=0, phy:: ch=1, chip=0, block=0, page_no=0, k=0
+logaddr=1081734, ofs=0, phy:: ch=1, chip=0, block=0, page_no=0, k=1
+logaddr=1081735, ofs=0, phy:: ch=1, chip=0, block=0, page_no=0, k=2
+logaddr=1081736, ofs=0, phy:: ch=1, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8653896,8
+bdbm: req_size 1
+WS,8653904,8
+bdbm: req_size 2
+WS,8653912,8
+bdbm: req_size 3
+WS,8653920,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081737, ofs=0, phy:: ch=2, chip=0, block=0, page_no=0, k=0
+logaddr=1081738, ofs=0, phy:: ch=2, chip=0, block=0, page_no=0, k=1
+logaddr=1081739, ofs=0, phy:: ch=2, chip=0, block=0, page_no=0, k=2
+logaddr=1081740, ofs=0, phy:: ch=2, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8653928,8
+bdbm: req_size 1
+WS,8653936,8
+bdbm: req_size 2
+WS,8653944,8
+bdbm: req_size 3
+WS,8653952,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081741, ofs=0, phy:: ch=3, chip=0, block=0, page_no=0, k=0
+logaddr=1081742, ofs=0, phy:: ch=3, chip=0, block=0, page_no=0, k=1
+logaddr=1081743, ofs=0, phy:: ch=3, chip=0, block=0, page_no=0, k=2
+logaddr=1081744, ofs=0, phy:: ch=3, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+bdbm: llm_make_req: 0, 4
+WS,8653960,8
+bdbm: req_size 1
+WS,8653968,8
+bdbm: hlm_end_blkio_req
+bdbm: --------userio_end_req----- nrfree4--------------------------
+bdbm: req_size 2
+WS,8653976,8
+bdbm: req_size 3
+WS,8653984,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081745, ofs=0, phy:: ch=4, chip=0, block=0, page_no=0, k=0
+logaddr=1081746, ofs=0, phy:: ch=4, chip=0, block=0, page_no=0, k=1
+logaddr=1081747, ofs=0, phy:: ch=4, chip=0, block=0, page_no=0, k=2
+logaddr=1081748, ofs=0, phy:: ch=4, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8653992,8
+bdbm: req_size 1
+WS,8654000,8
+bdbm: req_size 2
+WS,8654008,8
+bdbm: req_size 3
+WS,8654016,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081749, ofs=0, phy:: ch=5, chip=0, block=0, page_no=0, k=0
+logaddr=1081750, ofs=0, phy:: ch=5, chip=0, block=0, page_no=0, k=1
+logaddr=1081751, ofs=0, phy:: ch=5, chip=0, block=0, page_no=0, k=2
+logaddr=1081752, ofs=0, phy:: ch=5, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654024,8
+bdbm: req_size 1
+WS,8654032,8
+bdbm: req_size 2
+WS,8654040,8
+bdbm: req_size 3
+WS,8654048,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081753, ofs=0, phy:: ch=6, chip=0, block=0, page_no=0, k=0
+logaddr=1081754, ofs=0, phy:: ch=6, chip=0, block=0, page_no=0, k=1
+logaddr=1081755, ofs=0, phy:: ch=6, chip=0, block=0, page_no=0, k=2
+logaddr=1081756, ofs=0, phy:: ch=6, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654056,8
+bdbm: req_size 1
+WS,8654064,8
+bdbm: req_size 2
+WS,8654072,8
+bdbm: req_size 3
+WS,8654080,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081757, ofs=0, phy:: ch=7, chip=0, block=0, page_no=0, k=0
+logaddr=1081758, ofs=0, phy:: ch=7, chip=0, block=0, page_no=0, k=1
+logaddr=1081759, ofs=0, phy:: ch=7, chip=0, block=0, page_no=0, k=2
+logaddr=1081760, ofs=0, phy:: ch=7, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654088,8
+bdbm: req_size 1
+WS,8654096,8
+bdbm: req_size 2
+WS,8654104,8
+bdbm: req_size 3
+WS,8654112,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081761, ofs=0, phy:: ch=8, chip=0, block=0, page_no=0, k=0
+logaddr=1081762, ofs=0, phy:: ch=8, chip=0, block=0, page_no=0, k=1
+logaddr=1081763, ofs=0, phy:: ch=8, chip=0, block=0, page_no=0, k=2
+logaddr=1081764, ofs=0, phy:: ch=8, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654120,8
+bdbm: req_size 1
+WS,8654128,8
+bdbm: req_size 2
+WS,8654136,8
+bdbm: req_size 3
+WS,8654144,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081765, ofs=0, phy:: ch=9, chip=0, block=0, page_no=0, k=0
+logaddr=1081766, ofs=0, phy:: ch=9, chip=0, block=0, page_no=0, k=1
+logaddr=1081767, ofs=0, phy:: ch=9, chip=0, block=0, page_no=0, k=2
+logaddr=1081768, ofs=0, phy:: ch=9, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654152,8
+bdbm: req_size 1
+WS,8654160,8
+bdbm: req_size 2
+WS,8654168,8
+bdbm: req_size 3
+WS,8654176,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081769, ofs=0, phy:: ch=10, chip=0, block=0, page_no=0, k=0
+logaddr=1081770, ofs=0, phy:: ch=10, chip=0, block=0, page_no=0, k=1
+logaddr=1081771, ofs=0, phy:: ch=10, chip=0, block=0, page_no=0, k=2
+logaddr=1081772, ofs=0, phy:: ch=10, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654184,8
+bdbm: req_size 1
+WS,8654192,8
+bdbm: req_size 2
+WS,8654200,8
+bdbm: req_size 3
+WS,8654208,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081773, ofs=0, phy:: ch=11, chip=0, block=0, page_no=0, k=0
+logaddr=1081774, ofs=0, phy:: ch=11, chip=0, block=0, page_no=0, k=1
+logaddr=1081775, ofs=0, phy:: ch=11, chip=0, block=0, page_no=0, k=2
+logaddr=1081776, ofs=0, phy:: ch=11, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654216,8
+bdbm: req_size 1
+WS,8654224,8
+bdbm: req_size 2
+WS,8654232,8
+bdbm: req_size 3
+WS,8654240,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081777, ofs=0, phy:: ch=12, chip=0, block=0, page_no=0, k=0
+logaddr=1081778, ofs=0, phy:: ch=12, chip=0, block=0, page_no=0, k=1
+logaddr=1081779, ofs=0, phy:: ch=12, chip=0, block=0, page_no=0, k=2
+logaddr=1081780, ofs=0, phy:: ch=12, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654248,8
+bdbm: req_size 1
+WS,8654256,8
+bdbm: req_size 2
+WS,8654264,8
+bdbm: req_size 3
+WS,8654272,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081781, ofs=0, phy:: ch=13, chip=0, block=0, page_no=0, k=0
+logaddr=1081782, ofs=0, phy:: ch=13, chip=0, block=0, page_no=0, k=1
+logaddr=1081783, ofs=0, phy:: ch=13, chip=0, block=0, page_no=0, k=2
+logaddr=1081784, ofs=0, phy:: ch=13, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654280,8
+bdbm: req_size 1
+WS,8654288,8
+bdbm: req_size 2
+WS,8654296,8
+bdbm: req_size 3
+WS,8654304,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081785, ofs=0, phy:: ch=14, chip=0, block=0, page_no=0, k=0
+logaddr=1081786, ofs=0, phy:: ch=14, chip=0, block=0, page_no=0, k=1
+logaddr=1081787, ofs=0, phy:: ch=14, chip=0, block=0, page_no=0, k=2
+logaddr=1081788, ofs=0, phy:: ch=14, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654312,8
+bdbm: req_size 1
+WS,8654320,8
+bdbm: req_size 2
+WS,8654328,8
+bdbm: req_size 3
+WS,8654336,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081789, ofs=0, phy:: ch=15, chip=0, block=0, page_no=0, k=0
+logaddr=1081790, ofs=0, phy:: ch=15, chip=0, block=0, page_no=0, k=1
+logaddr=1081791, ofs=0, phy:: ch=15, chip=0, block=0, page_no=0, k=2
+logaddr=1081792, ofs=0, phy:: ch=15, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654344,8
+bdbm: req_size 1
+WS,8654352,8
+bdbm: req_size 2
+WS,8654360,8
+bdbm: req_size 3
+WS,8654368,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081793, ofs=0, phy:: ch=16, chip=0, block=0, page_no=0, k=0
+logaddr=1081794, ofs=0, phy:: ch=16, chip=0, block=0, page_no=0, k=1
+logaddr=1081795, ofs=0, phy:: ch=16, chip=0, block=0, page_no=0, k=2
+logaddr=1081796, ofs=0, phy:: ch=16, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8654376,8
+bdbm: req_size 1
+WS,8654384,8
+bdbm: req_size 2
+WS,8654392,8
+bdbm: req_size 3
+WS,8653816,8
+bdbm: req_size 4
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081797, ofs=0, phy:: ch=17, chip=0, block=0, page_no=0, k=0
+logaddr=1081798, ofs=0, phy:: ch=17, chip=0, block=0, page_no=0, k=1
+logaddr=1081799, ofs=0, phy:: ch=17, chip=0, block=0, page_no=0, k=2
+logaddr=1081727, ofs=0, phy:: ch=17, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 0
+WS,8653824,8
+bdbm: req_size 1
+W,15781888,2048
+bdbm: req_size 257
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1081728, ofs=0, phy:: ch=18, chip=0, block=0, page_no=0, k=0
+logaddr=1972736, ofs=0, phy:: ch=18, chip=0, block=0, page_no=0, k=1
+logaddr=1972737, ofs=0, phy:: ch=18, chip=0, block=0, page_no=0, k=2
+logaddr=1972738, ofs=0, phy:: ch=18, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 253
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972739, ofs=0, phy:: ch=19, chip=0, block=0, page_no=0, k=0
+logaddr=1972740, ofs=0, phy:: ch=19, chip=0, block=0, page_no=0, k=1
+logaddr=1972741, ofs=0, phy:: ch=19, chip=0, block=0, page_no=0, k=2
+logaddr=1972742, ofs=0, phy:: ch=19, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 249
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972743, ofs=0, phy:: ch=20, chip=0, block=0, page_no=0, k=0
+logaddr=1972744, ofs=0, phy:: ch=20, chip=0, block=0, page_no=0, k=1
+logaddr=1972745, ofs=0, phy:: ch=20, chip=0, block=0, page_no=0, k=2
+logaddr=1972746, ofs=0, phy:: ch=20, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 245
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972747, ofs=0, phy:: ch=21, chip=0, block=0, page_no=0, k=0
+logaddr=1972748, ofs=0, phy:: ch=21, chip=0, block=0, page_no=0, k=1
+logaddr=1972749, ofs=0, phy:: ch=21, chip=0, block=0, page_no=0, k=2
+logaddr=1972750, ofs=0, phy:: ch=21, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 241
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972751, ofs=0, phy:: ch=22, chip=0, block=0, page_no=0, k=0
+logaddr=1972752, ofs=0, phy:: ch=22, chip=0, block=0, page_no=0, k=1
+logaddr=1972753, ofs=0, phy:: ch=22, chip=0, block=0, page_no=0, k=2
+logaddr=1972754, ofs=0, phy:: ch=22, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 237
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972755, ofs=0, phy:: ch=23, chip=0, block=0, page_no=0, k=0
+logaddr=1972756, ofs=0, phy:: ch=23, chip=0, block=0, page_no=0, k=1
+logaddr=1972757, ofs=0, phy:: ch=23, chip=0, block=0, page_no=0, k=2
+logaddr=1972758, ofs=0, phy:: ch=23, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 233
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972759, ofs=0, phy:: ch=24, chip=0, block=0, page_no=0, k=0
+logaddr=1972760, ofs=0, phy:: ch=24, chip=0, block=0, page_no=0, k=1
+logaddr=1972761, ofs=0, phy:: ch=24, chip=0, block=0, page_no=0, k=2
+logaddr=1972762, ofs=0, phy:: ch=24, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 229
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972763, ofs=0, phy:: ch=25, chip=0, block=0, page_no=0, k=0
+logaddr=1972764, ofs=0, phy:: ch=25, chip=0, block=0, page_no=0, k=1
+logaddr=1972765, ofs=0, phy:: ch=25, chip=0, block=0, page_no=0, k=2
+logaddr=1972766, ofs=0, phy:: ch=25, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 225
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972767, ofs=0, phy:: ch=26, chip=0, block=0, page_no=0, k=0
+logaddr=1972768, ofs=0, phy:: ch=26, chip=0, block=0, page_no=0, k=1
+logaddr=1972769, ofs=0, phy:: ch=26, chip=0, block=0, page_no=0, k=2
+logaddr=1972770, ofs=0, phy:: ch=26, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 221
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972771, ofs=0, phy:: ch=27, chip=0, block=0, page_no=0, k=0
+logaddr=1972772, ofs=0, phy:: ch=27, chip=0, block=0, page_no=0, k=1
+logaddr=1972773, ofs=0, phy:: ch=27, chip=0, block=0, page_no=0, k=2
+logaddr=1972774, ofs=0, phy:: ch=27, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 217
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972775, ofs=0, phy:: ch=28, chip=0, block=0, page_no=0, k=0
+logaddr=1972776, ofs=0, phy:: ch=28, chip=0, block=0, page_no=0, k=1
+logaddr=1972777, ofs=0, phy:: ch=28, chip=0, block=0, page_no=0, k=2
+logaddr=1972778, ofs=0, phy:: ch=28, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 213
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972779, ofs=0, phy:: ch=29, chip=0, block=0, page_no=0, k=0
+logaddr=1972780, ofs=0, phy:: ch=29, chip=0, block=0, page_no=0, k=1
+logaddr=1972781, ofs=0, phy:: ch=29, chip=0, block=0, page_no=0, k=2
+logaddr=1972782, ofs=0, phy:: ch=29, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 209
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972783, ofs=0, phy:: ch=30, chip=0, block=0, page_no=0, k=0
+logaddr=1972784, ofs=0, phy:: ch=30, chip=0, block=0, page_no=0, k=1
+logaddr=1972785, ofs=0, phy:: ch=30, chip=0, block=0, page_no=0, k=2
+logaddr=1972786, ofs=0, phy:: ch=30, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 205
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972787, ofs=0, phy:: ch=31, chip=0, block=0, page_no=0, k=0
+logaddr=1972788, ofs=0, phy:: ch=31, chip=0, block=0, page_no=0, k=1
+logaddr=1972789, ofs=0, phy:: ch=31, chip=0, block=0, page_no=0, k=2
+logaddr=1972790, ofs=0, phy:: ch=31, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 201
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972791, ofs=0, phy:: ch=32, chip=0, block=0, page_no=0, k=0
+logaddr=1972792, ofs=0, phy:: ch=32, chip=0, block=0, page_no=0, k=1
+logaddr=1972793, ofs=0, phy:: ch=32, chip=0, block=0, page_no=0, k=2
+logaddr=1972794, ofs=0, phy:: ch=32, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 197
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972795, ofs=0, phy:: ch=33, chip=0, block=0, page_no=0, k=0
+logaddr=1972796, ofs=0, phy:: ch=33, chip=0, block=0, page_no=0, k=1
+logaddr=1972797, ofs=0, phy:: ch=33, chip=0, block=0, page_no=0, k=2
+logaddr=1972798, ofs=0, phy:: ch=33, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 193
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972799, ofs=0, phy:: ch=34, chip=0, block=0, page_no=0, k=0
+logaddr=1972800, ofs=0, phy:: ch=34, chip=0, block=0, page_no=0, k=1
+logaddr=1972801, ofs=0, phy:: ch=34, chip=0, block=0, page_no=0, k=2
+logaddr=1972802, ofs=0, phy:: ch=34, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 189
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972803, ofs=0, phy:: ch=35, chip=0, block=0, page_no=0, k=0
+logaddr=1972804, ofs=0, phy:: ch=35, chip=0, block=0, page_no=0, k=1
+logaddr=1972805, ofs=0, phy:: ch=35, chip=0, block=0, page_no=0, k=2
+logaddr=1972806, ofs=0, phy:: ch=35, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 185
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972807, ofs=0, phy:: ch=36, chip=0, block=0, page_no=0, k=0
+logaddr=1972808, ofs=0, phy:: ch=36, chip=0, block=0, page_no=0, k=1
+logaddr=1972809, ofs=0, phy:: ch=36, chip=0, block=0, page_no=0, k=2
+logaddr=1972810, ofs=0, phy:: ch=36, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 181
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972811, ofs=0, phy:: ch=37, chip=0, block=0, page_no=0, k=0
+logaddr=1972812, ofs=0, phy:: ch=37, chip=0, block=0, page_no=0, k=1
+logaddr=1972813, ofs=0, phy:: ch=37, chip=0, block=0, page_no=0, k=2
+logaddr=1972814, ofs=0, phy:: ch=37, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 177
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972815, ofs=0, phy:: ch=38, chip=0, block=0, page_no=0, k=0
+logaddr=1972816, ofs=0, phy:: ch=38, chip=0, block=0, page_no=0, k=1
+logaddr=1972817, ofs=0, phy:: ch=38, chip=0, block=0, page_no=0, k=2
+logaddr=1972818, ofs=0, phy:: ch=38, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 173
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972819, ofs=0, phy:: ch=39, chip=0, block=0, page_no=0, k=0
+logaddr=1972820, ofs=0, phy:: ch=39, chip=0, block=0, page_no=0, k=1
+logaddr=1972821, ofs=0, phy:: ch=39, chip=0, block=0, page_no=0, k=2
+logaddr=1972822, ofs=0, phy:: ch=39, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 169
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972823, ofs=0, phy:: ch=40, chip=0, block=0, page_no=0, k=0
+logaddr=1972824, ofs=0, phy:: ch=40, chip=0, block=0, page_no=0, k=1
+logaddr=1972825, ofs=0, phy:: ch=40, chip=0, block=0, page_no=0, k=2
+logaddr=1972826, ofs=0, phy:: ch=40, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 165
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972827, ofs=0, phy:: ch=41, chip=0, block=0, page_no=0, k=0
+logaddr=1972828, ofs=0, phy:: ch=41, chip=0, block=0, page_no=0, k=1
+logaddr=1972829, ofs=0, phy:: ch=41, chip=0, block=0, page_no=0, k=2
+logaddr=1972830, ofs=0, phy:: ch=41, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 161
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972831, ofs=0, phy:: ch=42, chip=0, block=0, page_no=0, k=0
+logaddr=1972832, ofs=0, phy:: ch=42, chip=0, block=0, page_no=0, k=1
+logaddr=1972833, ofs=0, phy:: ch=42, chip=0, block=0, page_no=0, k=2
+logaddr=1972834, ofs=0, phy:: ch=42, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 157
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972835, ofs=0, phy:: ch=43, chip=0, block=0, page_no=0, k=0
+logaddr=1972836, ofs=0, phy:: ch=43, chip=0, block=0, page_no=0, k=1
+logaddr=1972837, ofs=0, phy:: ch=43, chip=0, block=0, page_no=0, k=2
+logaddr=1972838, ofs=0, phy:: ch=43, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 153
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972839, ofs=0, phy:: ch=44, chip=0, block=0, page_no=0, k=0
+logaddr=1972840, ofs=0, phy:: ch=44, chip=0, block=0, page_no=0, k=1
+logaddr=1972841, ofs=0, phy:: ch=44, chip=0, block=0, page_no=0, k=2
+logaddr=1972842, ofs=0, phy:: ch=44, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 149
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972843, ofs=0, phy:: ch=45, chip=0, block=0, page_no=0, k=0
+logaddr=1972844, ofs=0, phy:: ch=45, chip=0, block=0, page_no=0, k=1
+logaddr=1972845, ofs=0, phy:: ch=45, chip=0, block=0, page_no=0, k=2
+logaddr=1972846, ofs=0, phy:: ch=45, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 145
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972847, ofs=0, phy:: ch=46, chip=0, block=0, page_no=0, k=0
+logaddr=1972848, ofs=0, phy:: ch=46, chip=0, block=0, page_no=0, k=1
+logaddr=1972849, ofs=0, phy:: ch=46, chip=0, block=0, page_no=0, k=2
+logaddr=1972850, ofs=0, phy:: ch=46, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 141
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972851, ofs=0, phy:: ch=47, chip=0, block=0, page_no=0, k=0
+logaddr=1972852, ofs=0, phy:: ch=47, chip=0, block=0, page_no=0, k=1
+logaddr=1972853, ofs=0, phy:: ch=47, chip=0, block=0, page_no=0, k=2
+logaddr=1972854, ofs=0, phy:: ch=47, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 137
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972855, ofs=0, phy:: ch=48, chip=0, block=0, page_no=0, k=0
+logaddr=1972856, ofs=0, phy:: ch=48, chip=0, block=0, page_no=0, k=1
+logaddr=1972857, ofs=0, phy:: ch=48, chip=0, block=0, page_no=0, k=2
+logaddr=1972858, ofs=0, phy:: ch=48, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 133
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972859, ofs=0, phy:: ch=49, chip=0, block=0, page_no=0, k=0
+logaddr=1972860, ofs=0, phy:: ch=49, chip=0, block=0, page_no=0, k=1
+logaddr=1972861, ofs=0, phy:: ch=49, chip=0, block=0, page_no=0, k=2
+logaddr=1972862, ofs=0, phy:: ch=49, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 129
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972863, ofs=0, phy:: ch=50, chip=0, block=0, page_no=0, k=0
+logaddr=1972864, ofs=0, phy:: ch=50, chip=0, block=0, page_no=0, k=1
+logaddr=1972865, ofs=0, phy:: ch=50, chip=0, block=0, page_no=0, k=2
+logaddr=1972866, ofs=0, phy:: ch=50, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 125
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972867, ofs=0, phy:: ch=51, chip=0, block=0, page_no=0, k=0
+logaddr=1972868, ofs=0, phy:: ch=51, chip=0, block=0, page_no=0, k=1
+logaddr=1972869, ofs=0, phy:: ch=51, chip=0, block=0, page_no=0, k=2
+logaddr=1972870, ofs=0, phy:: ch=51, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 121
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972871, ofs=0, phy:: ch=52, chip=0, block=0, page_no=0, k=0
+logaddr=1972872, ofs=0, phy:: ch=52, chip=0, block=0, page_no=0, k=1
+logaddr=1972873, ofs=0, phy:: ch=52, chip=0, block=0, page_no=0, k=2
+logaddr=1972874, ofs=0, phy:: ch=52, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 117
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972875, ofs=0, phy:: ch=53, chip=0, block=0, page_no=0, k=0
+logaddr=1972876, ofs=0, phy:: ch=53, chip=0, block=0, page_no=0, k=1
+logaddr=1972877, ofs=0, phy:: ch=53, chip=0, block=0, page_no=0, k=2
+logaddr=1972878, ofs=0, phy:: ch=53, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 113
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972879, ofs=0, phy:: ch=54, chip=0, block=0, page_no=0, k=0
+logaddr=1972880, ofs=0, phy:: ch=54, chip=0, block=0, page_no=0, k=1
+logaddr=1972881, ofs=0, phy:: ch=54, chip=0, block=0, page_no=0, k=2
+logaddr=1972882, ofs=0, phy:: ch=54, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 109
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972883, ofs=0, phy:: ch=55, chip=0, block=0, page_no=0, k=0
+logaddr=1972884, ofs=0, phy:: ch=55, chip=0, block=0, page_no=0, k=1
+logaddr=1972885, ofs=0, phy:: ch=55, chip=0, block=0, page_no=0, k=2
+logaddr=1972886, ofs=0, phy:: ch=55, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 105
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972887, ofs=0, phy:: ch=56, chip=0, block=0, page_no=0, k=0
+logaddr=1972888, ofs=0, phy:: ch=56, chip=0, block=0, page_no=0, k=1
+logaddr=1972889, ofs=0, phy:: ch=56, chip=0, block=0, page_no=0, k=2
+logaddr=1972890, ofs=0, phy:: ch=56, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 101
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972891, ofs=0, phy:: ch=57, chip=0, block=0, page_no=0, k=0
+logaddr=1972892, ofs=0, phy:: ch=57, chip=0, block=0, page_no=0, k=1
+logaddr=1972893, ofs=0, phy:: ch=57, chip=0, block=0, page_no=0, k=2
+logaddr=1972894, ofs=0, phy:: ch=57, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 97
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972895, ofs=0, phy:: ch=58, chip=0, block=0, page_no=0, k=0
+logaddr=1972896, ofs=0, phy:: ch=58, chip=0, block=0, page_no=0, k=1
+logaddr=1972897, ofs=0, phy:: ch=58, chip=0, block=0, page_no=0, k=2
+logaddr=1972898, ofs=0, phy:: ch=58, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 93
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972899, ofs=0, phy:: ch=59, chip=0, block=0, page_no=0, k=0
+logaddr=1972900, ofs=0, phy:: ch=59, chip=0, block=0, page_no=0, k=1
+logaddr=1972901, ofs=0, phy:: ch=59, chip=0, block=0, page_no=0, k=2
+logaddr=1972902, ofs=0, phy:: ch=59, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 89
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972903, ofs=0, phy:: ch=60, chip=0, block=0, page_no=0, k=0
+logaddr=1972904, ofs=0, phy:: ch=60, chip=0, block=0, page_no=0, k=1
+logaddr=1972905, ofs=0, phy:: ch=60, chip=0, block=0, page_no=0, k=2
+logaddr=1972906, ofs=0, phy:: ch=60, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 85
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972907, ofs=0, phy:: ch=61, chip=0, block=0, page_no=0, k=0
+logaddr=1972908, ofs=0, phy:: ch=61, chip=0, block=0, page_no=0, k=1
+logaddr=1972909, ofs=0, phy:: ch=61, chip=0, block=0, page_no=0, k=2
+logaddr=1972910, ofs=0, phy:: ch=61, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 81
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972911, ofs=0, phy:: ch=62, chip=0, block=0, page_no=0, k=0
+logaddr=1972912, ofs=0, phy:: ch=62, chip=0, block=0, page_no=0, k=1
+logaddr=1972913, ofs=0, phy:: ch=62, chip=0, block=0, page_no=0, k=2
+logaddr=1972914, ofs=0, phy:: ch=62, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 77
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972915, ofs=0, phy:: ch=63, chip=0, block=0, page_no=0, k=0
+logaddr=1972916, ofs=0, phy:: ch=63, chip=0, block=0, page_no=0, k=1
+logaddr=1972917, ofs=0, phy:: ch=63, chip=0, block=0, page_no=0, k=2
+logaddr=1972918, ofs=0, phy:: ch=63, chip=0, block=0, page_no=0, k=3
+bdbm: req_size 73
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972919, ofs=0, phy:: ch=0, chip=1, block=0, page_no=0, k=0
+logaddr=1972920, ofs=0, phy:: ch=0, chip=1, block=0, page_no=0, k=1
+logaddr=1972921, ofs=0, phy:: ch=0, chip=1, block=0, page_no=0, k=2
+logaddr=1972922, ofs=0, phy:: ch=0, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 69
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972923, ofs=0, phy:: ch=1, chip=1, block=0, page_no=0, k=0
+logaddr=1972924, ofs=0, phy:: ch=1, chip=1, block=0, page_no=0, k=1
+logaddr=1972925, ofs=0, phy:: ch=1, chip=1, block=0, page_no=0, k=2
+logaddr=1972926, ofs=0, phy:: ch=1, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 65
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972927, ofs=0, phy:: ch=2, chip=1, block=0, page_no=0, k=0
+logaddr=1972928, ofs=0, phy:: ch=2, chip=1, block=0, page_no=0, k=1
+logaddr=1972929, ofs=0, phy:: ch=2, chip=1, block=0, page_no=0, k=2
+logaddr=1972930, ofs=0, phy:: ch=2, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 61
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972931, ofs=0, phy:: ch=3, chip=1, block=0, page_no=0, k=0
+logaddr=1972932, ofs=0, phy:: ch=3, chip=1, block=0, page_no=0, k=1
+logaddr=1972933, ofs=0, phy:: ch=3, chip=1, block=0, page_no=0, k=2
+logaddr=1972934, ofs=0, phy:: ch=3, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 57
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972935, ofs=0, phy:: ch=4, chip=1, block=0, page_no=0, k=0
+logaddr=1972936, ofs=0, phy:: ch=4, chip=1, block=0, page_no=0, k=1
+logaddr=1972937, ofs=0, phy:: ch=4, chip=1, block=0, page_no=0, k=2
+logaddr=1972938, ofs=0, phy:: ch=4, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 53
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972939, ofs=0, phy:: ch=5, chip=1, block=0, page_no=0, k=0
+logaddr=1972940, ofs=0, phy:: ch=5, chip=1, block=0, page_no=0, k=1
+logaddr=1972941, ofs=0, phy:: ch=5, chip=1, block=0, page_no=0, k=2
+logaddr=1972942, ofs=0, phy:: ch=5, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 49
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972943, ofs=0, phy:: ch=6, chip=1, block=0, page_no=0, k=0
+logaddr=1972944, ofs=0, phy:: ch=6, chip=1, block=0, page_no=0, k=1
+logaddr=1972945, ofs=0, phy:: ch=6, chip=1, block=0, page_no=0, k=2
+logaddr=1972946, ofs=0, phy:: ch=6, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 45
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972947, ofs=0, phy:: ch=7, chip=1, block=0, page_no=0, k=0
+logaddr=1972948, ofs=0, phy:: ch=7, chip=1, block=0, page_no=0, k=1
+logaddr=1972949, ofs=0, phy:: ch=7, chip=1, block=0, page_no=0, k=2
+logaddr=1972950, ofs=0, phy:: ch=7, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 41
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972951, ofs=0, phy:: ch=8, chip=1, block=0, page_no=0, k=0
+logaddr=1972952, ofs=0, phy:: ch=8, chip=1, block=0, page_no=0, k=1
+logaddr=1972953, ofs=0, phy:: ch=8, chip=1, block=0, page_no=0, k=2
+logaddr=1972954, ofs=0, phy:: ch=8, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 37
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972955, ofs=0, phy:: ch=9, chip=1, block=0, page_no=0, k=0
+logaddr=1972956, ofs=0, phy:: ch=9, chip=1, block=0, page_no=0, k=1
+logaddr=1972957, ofs=0, phy:: ch=9, chip=1, block=0, page_no=0, k=2
+logaddr=1972958, ofs=0, phy:: ch=9, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 33
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972959, ofs=0, phy:: ch=10, chip=1, block=0, page_no=0, k=0
+logaddr=1972960, ofs=0, phy:: ch=10, chip=1, block=0, page_no=0, k=1
+logaddr=1972961, ofs=0, phy:: ch=10, chip=1, block=0, page_no=0, k=2
+logaddr=1972962, ofs=0, phy:: ch=10, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 29
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972963, ofs=0, phy:: ch=11, chip=1, block=0, page_no=0, k=0
+logaddr=1972964, ofs=0, phy:: ch=11, chip=1, block=0, page_no=0, k=1
+logaddr=1972965, ofs=0, phy:: ch=11, chip=1, block=0, page_no=0, k=2
+logaddr=1972966, ofs=0, phy:: ch=11, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 25
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972967, ofs=0, phy:: ch=12, chip=1, block=0, page_no=0, k=0
+logaddr=1972968, ofs=0, phy:: ch=12, chip=1, block=0, page_no=0, k=1
+logaddr=1972969, ofs=0, phy:: ch=12, chip=1, block=0, page_no=0, k=2
+logaddr=1972970, ofs=0, phy:: ch=12, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 21
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972971, ofs=0, phy:: ch=13, chip=1, block=0, page_no=0, k=0
+logaddr=1972972, ofs=0, phy:: ch=13, chip=1, block=0, page_no=0, k=1
+logaddr=1972973, ofs=0, phy:: ch=13, chip=1, block=0, page_no=0, k=2
+logaddr=1972974, ofs=0, phy:: ch=13, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 17
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972975, ofs=0, phy:: ch=14, chip=1, block=0, page_no=0, k=0
+logaddr=1972976, ofs=0, phy:: ch=14, chip=1, block=0, page_no=0, k=1
+logaddr=1972977, ofs=0, phy:: ch=14, chip=1, block=0, page_no=0, k=2
+logaddr=1972978, ofs=0, phy:: ch=14, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 13
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972979, ofs=0, phy:: ch=15, chip=1, block=0, page_no=0, k=0
+logaddr=1972980, ofs=0, phy:: ch=15, chip=1, block=0, page_no=0, k=1
+logaddr=1972981, ofs=0, phy:: ch=15, chip=1, block=0, page_no=0, k=2
+logaddr=1972982, ofs=0, phy:: ch=15, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 9
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972983, ofs=0, phy:: ch=16, chip=1, block=0, page_no=0, k=0
+logaddr=1972984, ofs=0, phy:: ch=16, chip=1, block=0, page_no=0, k=1
+logaddr=1972985, ofs=0, phy:: ch=16, chip=1, block=0, page_no=0, k=2
+logaddr=1972986, ofs=0, phy:: ch=16, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 5
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972987, ofs=0, phy:: ch=17, chip=1, block=0, page_no=0, k=0
+logaddr=1972988, ofs=0, phy:: ch=17, chip=1, block=0, page_no=0, k=1
+logaddr=1972989, ofs=0, phy:: ch=17, chip=1, block=0, page_no=0, k=2
+logaddr=1972990, ofs=0, phy:: ch=17, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 1
+W,15779840,1024
+bdbm: req_size 129
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972991, ofs=0, phy:: ch=18, chip=1, block=0, page_no=0, k=0
+logaddr=1972480, ofs=0, phy:: ch=18, chip=1, block=0, page_no=0, k=1
+logaddr=1972481, ofs=0, phy:: ch=18, chip=1, block=0, page_no=0, k=2
+logaddr=1972482, ofs=0, phy:: ch=18, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 125
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972483, ofs=0, phy:: ch=19, chip=1, block=0, page_no=0, k=0
+logaddr=1972484, ofs=0, phy:: ch=19, chip=1, block=0, page_no=0, k=1
+logaddr=1972485, ofs=0, phy:: ch=19, chip=1, block=0, page_no=0, k=2
+logaddr=1972486, ofs=0, phy:: ch=19, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 121
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972487, ofs=0, phy:: ch=20, chip=1, block=0, page_no=0, k=0
+logaddr=1972488, ofs=0, phy:: ch=20, chip=1, block=0, page_no=0, k=1
+logaddr=1972489, ofs=0, phy:: ch=20, chip=1, block=0, page_no=0, k=2
+logaddr=1972490, ofs=0, phy:: ch=20, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 117
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972491, ofs=0, phy:: ch=21, chip=1, block=0, page_no=0, k=0
+logaddr=1972492, ofs=0, phy:: ch=21, chip=1, block=0, page_no=0, k=1
+logaddr=1972493, ofs=0, phy:: ch=21, chip=1, block=0, page_no=0, k=2
+logaddr=1972494, ofs=0, phy:: ch=21, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 113
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972495, ofs=0, phy:: ch=22, chip=1, block=0, page_no=0, k=0
+logaddr=1972496, ofs=0, phy:: ch=22, chip=1, block=0, page_no=0, k=1
+logaddr=1972497, ofs=0, phy:: ch=22, chip=1, block=0, page_no=0, k=2
+logaddr=1972498, ofs=0, phy:: ch=22, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 109
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972499, ofs=0, phy:: ch=23, chip=1, block=0, page_no=0, k=0
+logaddr=1972500, ofs=0, phy:: ch=23, chip=1, block=0, page_no=0, k=1
+logaddr=1972501, ofs=0, phy:: ch=23, chip=1, block=0, page_no=0, k=2
+logaddr=1972502, ofs=0, phy:: ch=23, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 105
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972503, ofs=0, phy:: ch=24, chip=1, block=0, page_no=0, k=0
+logaddr=1972504, ofs=0, phy:: ch=24, chip=1, block=0, page_no=0, k=1
+logaddr=1972505, ofs=0, phy:: ch=24, chip=1, block=0, page_no=0, k=2
+logaddr=1972506, ofs=0, phy:: ch=24, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 101
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972507, ofs=0, phy:: ch=25, chip=1, block=0, page_no=0, k=0
+logaddr=1972508, ofs=0, phy:: ch=25, chip=1, block=0, page_no=0, k=1
+logaddr=1972509, ofs=0, phy:: ch=25, chip=1, block=0, page_no=0, k=2
+logaddr=1972510, ofs=0, phy:: ch=25, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 97
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972511, ofs=0, phy:: ch=26, chip=1, block=0, page_no=0, k=0
+logaddr=1972512, ofs=0, phy:: ch=26, chip=1, block=0, page_no=0, k=1
+logaddr=1972513, ofs=0, phy:: ch=26, chip=1, block=0, page_no=0, k=2
+logaddr=1972514, ofs=0, phy:: ch=26, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 93
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972515, ofs=0, phy:: ch=27, chip=1, block=0, page_no=0, k=0
+logaddr=1972516, ofs=0, phy:: ch=27, chip=1, block=0, page_no=0, k=1
+logaddr=1972517, ofs=0, phy:: ch=27, chip=1, block=0, page_no=0, k=2
+logaddr=1972518, ofs=0, phy:: ch=27, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 89
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972519, ofs=0, phy:: ch=28, chip=1, block=0, page_no=0, k=0
+logaddr=1972520, ofs=0, phy:: ch=28, chip=1, block=0, page_no=0, k=1
+logaddr=1972521, ofs=0, phy:: ch=28, chip=1, block=0, page_no=0, k=2
+logaddr=1972522, ofs=0, phy:: ch=28, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 85
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972523, ofs=0, phy:: ch=29, chip=1, block=0, page_no=0, k=0
+logaddr=1972524, ofs=0, phy:: ch=29, chip=1, block=0, page_no=0, k=1
+logaddr=1972525, ofs=0, phy:: ch=29, chip=1, block=0, page_no=0, k=2
+logaddr=1972526, ofs=0, phy:: ch=29, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 81
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972527, ofs=0, phy:: ch=30, chip=1, block=0, page_no=0, k=0
+logaddr=1972528, ofs=0, phy:: ch=30, chip=1, block=0, page_no=0, k=1
+logaddr=1972529, ofs=0, phy:: ch=30, chip=1, block=0, page_no=0, k=2
+logaddr=1972530, ofs=0, phy:: ch=30, chip=1, block=0, page_no=0, k=3
+bdbm: req_size 77
+bdbm: hlm_inf->make_req
+bdbm: hlm_for_each_llm_req : 0
+logaddr=1972531, ofs=0, phy:: ch=31, chip=1, block=0, page_no=0, k=0
+logaddr=1972532, ofs=0, phy:: ch=31, chip=1, block=0, page_no=0, k=1
+logaddr=1972533, ofs=0, phy:: ch=31, chip=1, block=0, page_no=0, k=2
+logaddr=1972534, ofs=0, phy:: ch=

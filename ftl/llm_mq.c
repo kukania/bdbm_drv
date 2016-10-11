@@ -105,7 +105,7 @@ int __llm_mq_thread (void* arg)
 		}
 
 		/* send reqs until Q becomes empty */
-		for (loop = 0; loop < p->nr_punits; loop++) {
+		for (loop = 0; loop < p->nr_punits; loop++){
 			bdbm_prior_queue_item_t* qitem = NULL;
 			bdbm_llm_req_t* r = NULL;
 
@@ -133,6 +133,7 @@ int __llm_mq_thread (void* arg)
 				bdi->ptr_llm_inf->end_req (bdi, r);
 				bdbm_warning ("oops! make_req failed");
 			}
+			bdbm_msg("dm_inf->make_req %lld", cnt);
 
 			cnt++;
 		}

@@ -1,0 +1,7 @@
+# Compiled source #
+###################
+
+*.a
+*.o
+*.so
+libftl

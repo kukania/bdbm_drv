@@ -159,6 +159,7 @@ bdbm_hlm_req_t* bdbm_hlm_reqs_pool_get_item (
 {
 	struct list_head* pos = NULL;
 	bdbm_hlm_req_t* item = NULL;
+	uint8_t cnt;
 
 	bdbm_spin_lock (&pool->lock);
 
@@ -171,7 +172,7 @@ again:
 
 	/* oops! there are no free items in the free-list */
 	if (item == NULL) {
-		bdbm_msg("***ADD MORE HLM_REQ***");
+		bdbm_msg("***ADD MORE HLM_REQ*** %d",pool->pool_size);
 		int i = 0;
 		/* add more items to the free-list */
 		for (i = 0; i < DEFAULT_POOL_INC_SIZE; i++) {
@@ -202,6 +203,7 @@ again:
 	item->nr_blkio_req = 0;
 	item->nr_charged = 0;
 	item->nr_llm_reqs=1;
+	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
 
 	bdbm_spin_unlock (&pool->lock);
 	return item;
@@ -378,14 +380,11 @@ static int __hlm_reqs_pool_add_write_req(
 	ptr_lr->ptr_hlm_req = (void*)hr;
 
 	hr->req_type = br->bi_rw; // hr request type
-	hr->blkio_req[hr->nr_blkio_req++] = br;// 
+	hr->blkio_req[hr->nr_blkio_req] = br;// 
+	hr->nr_pages_blk[hr->nr_blkio_req] = ret;
+	hr->nr_blkio_req++;
+
 	hr->nr_charged += ret;
-
-
-	if(last==1) {
-		hr->last_blkio_req = hr->nr_blkio_req;
-		bdbm_msg("Last blkio_req [%d]", hr->last_blkio_req);
-	}
 
 
 	return ret;

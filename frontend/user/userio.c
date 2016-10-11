@@ -161,7 +161,6 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 
 	}
 
-	//temporarily send end req must be  modified
 
 //	bdbm_msg("end buf_make_req");
 }
@@ -218,12 +217,31 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 {
 	bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 	bdbm_blkio_req_t** r = (bdbm_blkio_req_t**)req->blkio_req;
-	uint8_t i, nr_free;
+	uint8_t i,j,nr_free;
 
-	nr_free = req->last_blkio_req;
+	nr_free = req->nr_blkio_req;
 
 	bdbm_msg ("--------userio_end_req----- nrfree%d--------------------------",nr_free);
 
+
+	/* free first blk, next hlm is ok? */
+	for(i=0; i<nr_free; i++)
+	{
+		for(j=0; j<req->nr_pages_blk[i]; j++) {
+			atomic64_inc(&r[i]->reqs_done);
+		}
+
+		if(atomic64_read(&r[i]->reqs_done) == r[i]->bi_bvec_cnt){
+			if(r[i]->bi_bvec_cnt != r[i]->bi_bvec_index) {
+				bdbm_error("bvec_cnt != bvec_index");
+				return;
+			}
+
+			bdbm_msg("cnt : %lld, index : %lld", r[i]->bi_bvec_cnt, r[i]->bi_bvec_index);
+			r[i]->cb_done(r[i]);
+		}
+
+	}
 	/* destroy hlm_req */
 	bdbm_hlm_reqs_pool_free_item (p->hlm_reqs_pool, req);
 
@@ -233,15 +251,16 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 	p->nr_host_reqs--;
 	bdbm_sema_unlock (&p->count_lock);
 
+
 	/* call call-back function */
+	/*
 	for(i=0; i<nr_free; i++)
 	{
 		if (r[i]->cb_done) {
-			bdbm_msg("end_req of blk in hlm [%d]",i);
 			r[i]->cb_done (r[i]);
-			
 		}
 	}
+	*/
 }
 
 

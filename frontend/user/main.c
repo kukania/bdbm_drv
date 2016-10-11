@@ -435,6 +435,7 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
                 blkio_req->user2 = (bdbm_sema_t*)bdbm_malloc (sizeof (bdbm_sema_t));
 
 				blkio_req->bi_bvec_index = 0;
+				atomic64_set(&blkio_req->reqs_done, 0);
                 bdbm_sema_init ((bdbm_sema_t*)blkio_req->user2);
 
                 blkio_req->bi_bvec_ptr[0] = (uint8_t*)bdbm_malloc (4096);

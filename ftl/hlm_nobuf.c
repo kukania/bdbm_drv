@@ -110,12 +110,11 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	bdbm_ftl_inf_t* ftl = BDBM_GET_FTL_INF(bdi);
 	bdbm_llm_req_t* lr = NULL;
 	uint64_t i = 0, j = 0, sp_ofs;
-	uint64_t c=0;
 	bdbm_blkio_req_t* br =(bdbm_blkio_req_t*)hr->blkio_req[0]; //must be changed!
 
 	/* perform mapping with the FTL */
 	bdbm_hlm_for_each_llm_req (lr, hr, i) {
-		bdbm_msg("hlm_for_each_llm_req : %lld",c++);
+		bdbm_msg("hlm_for_each_llm_req : %lld",i);
 		/* (1) get the physical locations through the FTL */
 		if (bdbm_is_normal (lr->req_type)) {
 			/* handling normal I/O operations */
@@ -175,8 +174,10 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 
 	/* (3) send llm_req to llm */
 	if (bdi->ptr_llm_inf->make_reqs == NULL) {
+	
 		/* send individual llm-reqs to llm */
 		bdbm_hlm_for_each_llm_req (lr, hr, i) {
+			bdbm_msg("llm_inf->make_req : %lld",i);
 			if (bdi->ptr_llm_inf->make_req (bdi, lr) != 0) {
 				bdbm_error ("oops! make_req () failed");
 				bdbm_bug_on (1);
