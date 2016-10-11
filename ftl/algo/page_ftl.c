@@ -788,6 +788,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 	/* TEMP */
 	for (i = 0; i < nr_punits * np->nr_pages_per_block; i++) {
 		hlm_reqs_pool_reset_fmain (&hlm_gc->llm_reqs[i].fmain);
+		hlm_reqs_pool_alloc_fmain_pad (&hlm_gc->llm_reqs[i].fmain);
 	}
 	/* TEMP */
 
@@ -812,6 +813,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 					r->fmain.kp_stt[k] = KP_STT_HOLE;
 				}
 			}
+			hlm_reqs_pool_alloc_fmain_pad (&r->fmain);
 			/* if it is, selects it as the gc candidates */
 			if (has_valid) {
 				r->req_type = REQTYPE_GC_READ;
