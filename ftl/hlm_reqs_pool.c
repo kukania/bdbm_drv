@@ -340,8 +340,8 @@ static int __hlm_reqs_pool_add_write_req(
 	uint64_t sec_start, sec_end, pg_start, pg_end;
 	uint64_t nr_charged = hr->nr_charged;
 	uint64_t nr_remain_page = 4 - nr_charged; //number of remain page
-	uint64_t nr_add = br->bi_bvec_cnt; // number of to add
 	uint64_t bvec_index = br->bi_bvec_index;
+	uint64_t nr_add = br->bi_bvec_cnt - bvec_index; // number of to add
 	uint64_t i,ret;
 	uint8_t last=0; // last of current blk;
 

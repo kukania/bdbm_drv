@@ -138,17 +138,16 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 
 	while(1)
 	{
-		req_size = hr->nr_charged + br->bi_bvec_cnt;
-		bdbm_msg("req_size %d", req_size);
+		req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
+//		bdbm_msg("req_size %d", req_size);
 		if(req_size <4) break;
 		
 		ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br); // ret is added size
 
-		bdbm_msg("hlm_inf->make_req");
+//		bdbm_msg("hlm_inf->make_req");
 		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 		}
-		br->bi_bvec_cnt -= ret;
 		br->bi_bvec_index +=ret;
 		br->bi_offset += 8*ret;
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
@@ -221,7 +220,7 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 
 	nr_free = req->nr_blkio_req;
 
-	bdbm_msg ("--------userio_end_req----- nrfree%d--------------------------",nr_free);
+//	bdbm_msg ("--------userio_end_req----- nrfree%d--------------------------",nr_free);
 
 
 	/* free first blk, next hlm is ok? */
@@ -234,10 +233,10 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 		if(atomic64_read(&r[i]->reqs_done) == r[i]->bi_bvec_cnt){
 			if(r[i]->bi_bvec_cnt != r[i]->bi_bvec_index) {
 				bdbm_error("bvec_cnt != bvec_index");
+				bdbm_msg("cnt : %lld, index : %lld", r[i]->bi_bvec_cnt, r[i]->bi_bvec_index);
 				return;
 			}
 
-			bdbm_msg("cnt : %lld, index : %lld", r[i]->bi_bvec_cnt, r[i]->bi_bvec_index);
 			r[i]->cb_done(r[i]);
 		}
 
@@ -250,7 +249,6 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 	bdbm_sema_lock (&p->count_lock);
 	p->nr_host_reqs--;
 	bdbm_sema_unlock (&p->count_lock);
-
 
 	/* call call-back function */
 	/*

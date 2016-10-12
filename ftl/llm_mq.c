@@ -133,7 +133,7 @@ int __llm_mq_thread (void* arg)
 				bdi->ptr_llm_inf->end_req (bdi, r);
 				bdbm_warning ("oops! make_req failed");
 			}
-			bdbm_msg("dm_inf->make_req %lld", cnt);
+			//bdbm_msg("dm_inf->make_req %lld", cnt);
 
 			cnt++;
 		}
