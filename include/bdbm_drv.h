@@ -144,6 +144,7 @@ typedef struct {
 	uint64_t bi_size; /* unit: sector (512B) */
 	uint64_t bi_bvec_cnt; /* unit: kernel-page (4KB); it must be equal to 'bi_size / 8' */
 	uint64_t bi_bvec_index; /* must initialized 0, index of bvec_ptr[index]*/
+	uint32_t blk_number;
 	uint8_t* bi_bvec_ptr[BDBM_BLKIO_MAX_VECS]; /* an array of 4 KB data for bvec */
 	
 	atomic64_t reqs_done; //number of done request count

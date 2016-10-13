@@ -312,9 +312,13 @@ int main (int argc, char** argv)
         char ops[16];
         float tmpf;
         int tmp;
+		int sec,usec;
+		long long time,elapsed_time; // time(ms)
         size_t offset, limit=0;
         int size;
-        //bdbm_msg ("[main] run ftlib... (%d)", sizeof (bdbm_llm_req_t));
+		bdbm_stopwatch_t sw;
+
+		//bdbm_msg ("[main] run ftlib... (%d)", sizeof (bdbm_llm_req_t));
 
         //bdbm_msg ("[user-main] initialize bdbm_drv");
         if ((_bdi = bdbm_drv_create ()) == NULL) {
@@ -382,16 +386,28 @@ int main (int argc, char** argv)
 
         fd = open(argv[1], O_RDONLY);
         fp = fdopen(fd, "r");
+		bdbm_stopwatch_start(&sw);
+
         while(!feof(fp)){
 
                 fscanf(fp, "%d,%d %d %d %d.%d %d %[^ ] %[^ ] %zu + %d %[^\n]", \
-                                &tmp, &tmp, &tmp, &tmp, &tmp, &tmp, &tmp, \
+                                &tmp, &tmp, &tmp, &tmp, &sec, &usec, &tmp, \
                                 tmps, ops, &offset, &size, tmps);
 
-                printf("%s,%zu,%d\n",  ops, offset, size);
+
+				
+                printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
                 if(offset >= limit)
                         continue;
 
+				time = sec*1000 + usec/(1000*1000);
+				while(1) {
+					elapsed_time = bdbm_stopwatch_get_elapsed_time_ms(&sw);
+				//	printf("time [%lld], elapsed time [%lld]\n", time, elapsed_time);
+					if(time <= elapsed_time )
+						break;
+					usleep(1000);
+				}
                 if(ops[0] == 'W'){
                         host_thread_fn_write_tracefile (offset, size);
                 }
@@ -434,6 +450,7 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
                 blkio_req->user = (void*)blkio_req;
                 blkio_req->user2 = (bdbm_sema_t*)bdbm_malloc (sizeof (bdbm_sema_t));
 
+				blkio_req->blk_number = w_cnt;
 				blkio_req->bi_bvec_index = 0;
 				atomic64_set(&blkio_req->reqs_done, 0);
                 bdbm_sema_init ((bdbm_sema_t*)blkio_req->user2);
@@ -447,11 +464,9 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 
 //                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
-				/*              
-				bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+//				bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
 
 
-               				*/
 //				bdbm_msg("host_inf->make_req done");
 
                 offset += size;
