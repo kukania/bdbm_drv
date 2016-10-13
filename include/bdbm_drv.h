@@ -229,6 +229,7 @@ typedef struct {
 	uint8_t nr_pages_blk[4];	
 	uint8_t nr_blkio_req; /* number of blkio*/
 	uint8_t nr_charged; /* How many subpage charged*/
+	uint32_t hlm_number;
 	uint8_t ret;
 } bdbm_hlm_req_t;
 

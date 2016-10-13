@@ -130,6 +130,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	static bdbm_hlm_req_t* hr = NULL;
 	uint64_t req_size;
 	uint64_t ret = 0; 
+	uint32_t loop=0;
 	//bdbm_msg("start buf_make_req");
 
 	if(hr==NULL) {
@@ -145,11 +146,13 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 		ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br); // ret is added size
 		br->bi_bvec_index +=ret;
 		br->bi_offset += 8*ret;
+		hr->hlm_number = loop;
 
 //		bdbm_msg("hlm_inf->make_req");
 		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 		}
+		bdbm_msg("'%d' hlm of number [%d]",loop++, br->blk_number);
 
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 	}
@@ -160,7 +163,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 		ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br);
 		br->bi_bvec_index +=ret;
 		br->bi_offset += 8*ret;
-
+		hr->hlm_number = loop;
 	}
 
 
@@ -220,17 +223,24 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 	bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 	bdbm_blkio_req_t** r = (bdbm_blkio_req_t**)req->blkio_req;
 	uint8_t i,j,nr_free;
+	uint64_t cnt;
 	nr_free = req->nr_blkio_req;
 
 //	bdbm_msg ("--------userio_end_req----- nrfree%d--------------------------",nr_free);
 
 
+	bdbm_msg("nr_free : %d, '%d'th hlm of number [%d] blk",nr_free, req->hlm_number, r[0]->blk_number);
 	/* free first blk, next hlm is ok? */
 	for(i=0; i<nr_free; i++)
 	{
+	//	if(r[0]->blk_number > 70) bdbm_msg("hlm release called, number [%d]",r[0]->blk_number);
+	
 		for(j=0; j<req->nr_pages_blk[i]; j++) {
 			atomic64_inc(&r[i]->reqs_done);
 		}
+
+		cnt =atomic64_read(&r[i]->reqs_done);
+	//	if(cnt >200) bdbm_msg("blk_number [%d] , cnt [%lld]", r[i]->blk_number, cnt);
 
 		if(atomic64_read(&r[i]->reqs_done) == r[i]->bi_bvec_cnt){
 			if(r[i]->bi_bvec_cnt != r[i]->bi_bvec_index) {
@@ -242,9 +252,12 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 			r[i]->cb_done(r[i]);
 		}
 
+
 	}
 	/* destroy hlm_req */
 	//bdbm_msg("hlm free");
+	
+	atomic64_set(&req->nr_llm_reqs_done,0);
 	bdbm_hlm_reqs_pool_free_item (p->hlm_reqs_pool, req);
 
 	/* decreate # of reqs */

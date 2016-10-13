@@ -154,7 +154,8 @@ void dm_user_close (bdbm_drv_info_t* bdi)
 uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 {
 	struct dm_user_private* p; 
-
+	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t*)ptr_llm_req->ptr_hlm_req;
+	
 	p = (struct dm_user_private*)bdi->ptr_dm_inf->ptr_private;
 
 	/*TODO: do somthing */
@@ -162,6 +163,7 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 	p->w_cnt++;
 	bdbm_spin_unlock (&p->dm_lock);
 
+	bdbm_msg("dm get hlm, dm end req %d",hr->hlm_number);
 	dm_user_end_req (bdi, ptr_llm_req);
 
 	return 0;
@@ -170,6 +172,7 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 void dm_user_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 {
 	struct dm_user_private* p; 
+	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t*)ptr_llm_req->ptr_hlm_req;
 
 	p = (struct dm_user_private*)bdi->ptr_dm_inf->ptr_private;
 
@@ -177,6 +180,7 @@ void dm_user_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 	p->w_cnt_done++;
 	bdbm_spin_unlock (&p->dm_lock);
 
+	bdbm_msg("llm_inf->end_req  %d",hr->hlm_number);
 	bdi->ptr_llm_inf->end_req (bdi, ptr_llm_req);
 }
 

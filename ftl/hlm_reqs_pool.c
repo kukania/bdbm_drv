@@ -183,6 +183,14 @@ again:
 			}
 			hlm_reqs_pool_allocate_llm_reqs (item->llm_reqs, BDBM_BLKIO_MAX_VECS, RP_MEM_VIRT);
 			bdbm_sema_init (&item->done);
+	
+			
+			//initialize hr
+			item->nr_blkio_req = 0;
+			item->nr_charged = 0;
+			item->nr_llm_reqs=1;
+			for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
+
 			list_add_tail (&item->list, &pool->free_list);
 		}
 		/* increase the size of the pool */
@@ -195,15 +203,17 @@ again:
 	if (item == NULL)
 		goto fail;
 
-	/* move it to the used_list */
-	list_del (&item->list);
-	list_add_tail (&item->list, &pool->used_list);
-
 	//initialize hr
 	item->nr_blkio_req = 0;
 	item->nr_charged = 0;
 	item->nr_llm_reqs=1;
 	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
+
+	/* move it to the used_list */
+	list_del (&item->list);
+	list_add_tail (&item->list, &pool->used_list);
+
+
 
 	bdbm_spin_unlock (&pool->lock);
 	return item;

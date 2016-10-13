@@ -95,6 +95,7 @@ uint32_t llm_noq_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 {
 	uint32_t ret;
 	static uint64_t cnt = 0;
+	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t*)llm_req->ptr_hlm_req;
 
 	/* just for display */
 	if (cnt % 50000 == 0) bdbm_msg ("llm_noq_make_req: %llu", cnt);
@@ -104,6 +105,8 @@ uint32_t llm_noq_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 	pmu_update_sw (bdi, llm_req);
 	pmu_update_q (bdi, llm_req);
 
+
+	bdbm_msg("dm_inf->make_req %d", hr->hlm_number);
 	/* send a request to a device manager */
 	if ((ret = bdi->ptr_dm_inf->make_req (bdi, llm_req)) != 0) {
 		/* handle error cases */
@@ -133,11 +136,16 @@ void llm_noq_flush (bdbm_drv_info_t* bdi)
 
 void llm_noq_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 {
+	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t*)llm_req->ptr_hlm_req;
+	uint8_t num = hr->hlm_number;
 	/* update pmu */
 	pmu_update_tot (bdi, llm_req);
 	pmu_inc (bdi, llm_req);
+	
+	bdbm_msg("hlm_inf->end_req %d", hr->hlm_number);
 
 	/* finish a request */
 	bdi->ptr_hlm_inf->end_req (bdi, llm_req);
+	bdbm_msg("hlm_inf->end_req finished!!! %d",num);
 }
 

@@ -462,9 +462,9 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 
 //				bdbm_msg("host_inf->make_req start");
 
-//                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
-//				bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+				//bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
 
 
 //				bdbm_msg("host_inf->make_req done");

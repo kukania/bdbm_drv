@@ -177,7 +177,7 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	
 		/* send individual llm-reqs to llm */
 		bdbm_hlm_for_each_llm_req (lr, hr, i) {
-	//		bdbm_msg("llm_inf->make_req : %lld",i);
+			bdbm_msg("llm_inf->make_req : %d [%d]",hr->hlm_number, br->blk_number);
 			if (bdi->ptr_llm_inf->make_req (bdi, lr) != 0) {
 				bdbm_error ("oops! make_req () failed");
 				bdbm_bug_on (1);
@@ -290,14 +290,22 @@ uint32_t hlm_nobuf_make_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 void __hlm_nobuf_end_blkio_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* lr)
 {
 	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t* )lr->ptr_hlm_req;
-
+	bdbm_blkio_req_t* br= (bdbm_blkio_req_t*)hr->blkio_req[0];
 	/* increase # of reqs finished */
+
+	bdbm_msg("hlm_end_req before atomic inc %lld", atomic64_read(&hr->nr_llm_reqs_done));
 	atomic64_inc (&hr->nr_llm_reqs_done);
 	lr->req_type |= REQTYPE_DONE;
 
+	bdbm_msg("hlm_get end req %d blk number[%d]", hr->hlm_number, br->blk_number);
 	if (atomic64_read (&hr->nr_llm_reqs_done) == hr->nr_llm_reqs) {
+		bdbm_msg("hlm_end_req %d   blk number[%d]",
+				hr->hlm_number,br->blk_number );
 		/* finish the host request */
 		bdi->ptr_host_inf->end_req (bdi, hr);
+	} else {
+		bdbm_error("nr_llm_reqs_done != nr_llm_reqs");
+		bdbm_msg("nr_llm_reqs_done %lld, hr->nr_llm_reqs %lld", atomic64_read(&hr->nr_llm_reqs_done), hr->nr_llm_reqs);
 	}
 }
 
