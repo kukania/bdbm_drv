@@ -152,7 +152,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 		}
-		bdbm_msg("'%d' hlm of number [%d]",loop++, br->blk_number);
+//		bdbm_msg("'%d' hlm of number [%d]",loop++, br->blk_number);
 
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 	}
@@ -229,7 +229,7 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 //	bdbm_msg ("--------userio_end_req----- nrfree%d--------------------------",nr_free);
 
 
-	bdbm_msg("nr_free : %d, '%d'th hlm of number [%d] blk",nr_free, req->hlm_number, r[0]->blk_number);
+//	bdbm_msg("nr_free : %d, '%d'th hlm of number [%d] blk",nr_free, req->hlm_number, r[0]->blk_number);
 	/* free first blk, next hlm is ok? */
 	for(i=0; i<nr_free; i++)
 	{
@@ -248,7 +248,7 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 				return;
 			}
 
-			bdbm_msg("------ release blk_number [%d]-------",r[i]->blk_number);
+//			bdbm_msg("-------------------- release blk_number [%d]-----------",r[i]->blk_number);
 			r[i]->cb_done(r[i]);
 		}
 

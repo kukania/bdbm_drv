@@ -80,10 +80,11 @@ void write_done (void* req)
 	uint32_t j = 0;
 	bdbm_blkio_req_t* blkio_req = (bdbm_blkio_req_t*)req;
 	bdbm_free (blkio_req->bi_bvec_ptr[0]);
+	bdbm_free( blkio_req->user2);
     bdbm_free (blkio_req);
 
 
-	bdbm_sema_unlock ((bdbm_sema_t*)blkio_req->user2);
+//	bdbm_sema_unlock ((bdbm_sema_t*)blkio_req->user2);
 
 	/*
 	for (j = 0; j < blkio_req->bi_bvec_cnt; j++)
@@ -400,6 +401,7 @@ int main (int argc, char** argv)
                 if(offset >= limit)
                         continue;
 
+				/*
 				time = sec*1000 + usec/(1000*1000);
 				while(1) {
 					elapsed_time = bdbm_stopwatch_get_elapsed_time_ms(&sw);
@@ -408,6 +410,7 @@ int main (int argc, char** argv)
 						break;
 					usleep(1000);
 				}
+				*/
                 if(ops[0] == 'W'){
                         host_thread_fn_write_tracefile (offset, size);
                 }
@@ -439,6 +442,7 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 
 //		bdbm_msg("first fn_write tracefile");
         for (i = 0; i < 1; i++) {
+
                 bdbm_blkio_req_t* blkio_req = (bdbm_blkio_req_t*)bdbm_malloc (sizeof (bdbm_blkio_req_t));
 
                 /* build blkio req */
@@ -448,7 +452,10 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
                 blkio_req->bi_bvec_cnt = size / 8;
                 blkio_req->cb_done = write_done;
                 blkio_req->user = (void*)blkio_req;
-                blkio_req->user2 = (bdbm_sema_t*)bdbm_malloc (sizeof (bdbm_sema_t));
+
+				if(offset==8654832) bdbm_msg("b");
+               blkio_req->user2 = (bdbm_sema_t*)bdbm_malloc (sizeof (bdbm_sema_t));
+				if(offset==8654832) bdbm_msg("b");
 
 				blkio_req->blk_number = w_cnt;
 				blkio_req->bi_bvec_index = 0;
@@ -462,7 +469,7 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 
 //				bdbm_msg("host_inf->make_req start");
 
-                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+//              bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
 				//bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
 

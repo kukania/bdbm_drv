@@ -106,7 +106,7 @@ uint32_t llm_noq_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 	pmu_update_q (bdi, llm_req);
 
 
-	bdbm_msg("dm_inf->make_req %d", hr->hlm_number);
+//	bdbm_msg("dm_inf->make_req %d", hr->hlm_number);
 	/* send a request to a device manager */
 	if ((ret = bdi->ptr_dm_inf->make_req (bdi, llm_req)) != 0) {
 		/* handle error cases */
@@ -142,10 +142,10 @@ void llm_noq_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 	pmu_update_tot (bdi, llm_req);
 	pmu_inc (bdi, llm_req);
 	
-	bdbm_msg("hlm_inf->end_req %d", hr->hlm_number);
+//	bdbm_msg("hlm_inf->end_req %d", hr->hlm_number);
 
 	/* finish a request */
 	bdi->ptr_hlm_inf->end_req (bdi, llm_req);
-	bdbm_msg("hlm_inf->end_req finished!!! %d",num);
+//	bdbm_msg("hlm_inf->end_req finished!!! %d",num);
 }
 

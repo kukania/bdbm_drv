@@ -189,7 +189,7 @@ again:
 			item->nr_blkio_req = 0;
 			item->nr_charged = 0;
 			item->nr_llm_reqs=1;
-			for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
+			for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=NULL;
 
 			list_add_tail (&item->list, &pool->free_list);
 		}
@@ -207,7 +207,7 @@ again:
 	item->nr_blkio_req = 0;
 	item->nr_charged = 0;
 	item->nr_llm_reqs=1;
-	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
+	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=NULL;
 
 	/* move it to the used_list */
 	list_del (&item->list);
@@ -384,7 +384,6 @@ static int __hlm_reqs_pool_add_write_req(
 		}
 	} else {
 		ret = nr_add;
-		last = 1;
 		for(i=nr_charged; i<nr_charged+nr_add; i++) {
 			ptr_lr->logaddr.lpa[i] = sec_start/ NR_KSECTORS_IN(pool->map_unit);
 			ptr_fm->kp_stt[i] = KP_STT_DATA;
