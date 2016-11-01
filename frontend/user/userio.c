@@ -107,7 +107,7 @@ void userio_close (bdbm_drv_info_t* bdi)
 		}
 		bdbm_sema_unlock (&p->count_lock);
 
-		//bdbm_msg ("p->nr_host_reqs = %llu", p->nr_host_reqs);
+		bdbm_msg ("p->nr_host_reqs = %llu", p->nr_host_reqs);
 		bdbm_thread_msleep (1);
 	}
 
@@ -125,7 +125,7 @@ void userio_close (bdbm_drv_info_t* bdi)
 void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 {
 
-	bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
+bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 	bdbm_blkio_req_t* br = (bdbm_blkio_req_t*)bio;
 	static bdbm_hlm_req_t* hr = NULL;
 	uint64_t req_size;
@@ -133,40 +133,45 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	uint32_t loop=0;
 	//bdbm_msg("start buf_make_req");
 
+
+
+
+	bdbm_sema_lock (&p->count_lock);
+	//bdbm_msg("p->nr_host_reqs %llu [make req]");
+	p->nr_host_reqs++;
+	bdbm_sema_unlock (&p->count_lock);
+
 	if(hr==NULL) {
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool); //hlmsize=0;
 	}
 
-	while(1)
+	while(1) 
 	{
 		req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
-//		bdbm_msg("req_size %d", req_size);
-		if(req_size <4) break;
-		
-		ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br); // ret is added size
-		br->bi_bvec_index +=ret;
-		br->bi_offset += 8*ret;
-		hr->hlm_number = loop;
-
-//		bdbm_msg("hlm_inf->make_req");
-		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
-			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
+		if(req_size <=4) 
+		{
+			ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br);
+			br->bi_bvec_index +=ret;
+			br->bi_offset += 8*ret;
+			hr-> hlm_number = loop;
+			if(req_size==4) {
+				if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
+					bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
+				}
+				hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
+			}
+			break;
 		}
-//		bdbm_msg("'%d' hlm of number [%d]",loop++, br->blk_number);
 
-		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
-	}
-
-
-	if(req_size !=0) {
-		//last hlm of current blk
 		ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br);
 		br->bi_bvec_index +=ret;
 		br->bi_offset += 8*ret;
-		hr->hlm_number = loop;
+		hr-> hlm_number = loop;
+		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
+			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
+		}
+		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 	}
-
-
 //	bdbm_msg("end buf_make_req");
 }
 
@@ -247,6 +252,11 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 				bdbm_error("bvec_cnt != bvec_index");
 				return;
 			}
+			bdbm_sema_lock (&p->count_lock);
+			p->nr_host_reqs--;
+		//	bdbm_msg("reqs_done %d, bvec_cnt %d [end req]", cnt, r[i]->bi_bvec_cnt);
+		//	bdbm_msg("p->nr_host_reqs %llu [end req]");
+			bdbm_sema_unlock (&p->count_lock);
 
 //			bdbm_msg("-------------------- release blk_number [%d]-----------",r[i]->blk_number);
 			r[i]->cb_done(r[i]);
@@ -262,9 +272,6 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 
 	/* decreate # of reqs */
 	/*atomic_dec (&p->nr_host_reqs);*/
-	bdbm_sema_lock (&p->count_lock);
-	p->nr_host_reqs--;
-	bdbm_sema_unlock (&p->count_lock);
 
 	/* call call-back function */
 	/*

@@ -290,7 +290,7 @@ uint32_t hlm_nobuf_make_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 void __hlm_nobuf_end_blkio_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* lr)
 {
 	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t* )lr->ptr_hlm_req;
-	bdbm_blkio_req_t* br= (bdbm_blkio_req_t*)hr->blkio_req[0];
+//	bdbm_blkio_req_* br= (bdbm_blkio_req_t*)hr->blkio_req[0];
 	/* increase # of reqs finished */
 
 //	bdbm_msg("hlm_end_req before atomic inc %lld", atomic64_read(&hr->nr_llm_reqs_done));

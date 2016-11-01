@@ -281,11 +281,15 @@ void bdbm_drv_close (bdbm_drv_info_t* bdi)
 	/* display performance results */
 	pmu_display (bdi);
 
+	bdbm_msg("next display1");
+
 	if (bdi->ptr_host_inf)
 		bdi->ptr_host_inf->close (bdi);
+	bdbm_msg("next display2");
 
 	if (bdi->ptr_hlm_inf)
 		bdi->ptr_hlm_inf->destroy (bdi);
+	bdbm_msg("next display3");
 
 	if (bdi->ptr_ftl_inf) {
 		if (bdi->parm_ftl.snapshot == SNAPSHOT_ENABLE && bdi->ptr_ftl_inf->store) {
@@ -294,9 +298,11 @@ void bdbm_drv_close (bdbm_drv_info_t* bdi)
 		}
 		bdi->ptr_ftl_inf->destroy (bdi);
 	}
+	bdbm_msg("next display4");
 
 	if (bdi->ptr_llm_inf)
 		bdi->ptr_llm_inf->destroy (bdi);
+	bdbm_msg("next display5");
 
 	if (bdi->ptr_dm_inf) {
 		if (bdi->parm_ftl.snapshot == SNAPSHOT_ENABLE && bdi->ptr_dm_inf->store) {
@@ -305,6 +311,7 @@ void bdbm_drv_close (bdbm_drv_info_t* bdi)
 		}
 		bdi->ptr_dm_inf->close (bdi);
 	}
+	bdbm_msg("next display6");
 
 	pmu_destory (bdi);
 

@@ -189,7 +189,7 @@ again:
 			item->nr_blkio_req = 0;
 			item->nr_charged = 0;
 			item->nr_llm_reqs=1;
-			for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=NULL;
+			for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
 
 			list_add_tail (&item->list, &pool->free_list);
 		}
@@ -207,7 +207,7 @@ again:
 	item->nr_blkio_req = 0;
 	item->nr_charged = 0;
 	item->nr_llm_reqs=1;
-	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=NULL;
+	for( cnt=0; cnt<4; cnt++) item->nr_pages_blk[cnt]=0;
 
 	/* move it to the used_list */
 	list_del (&item->list);

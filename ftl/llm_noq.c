@@ -137,7 +137,7 @@ void llm_noq_flush (bdbm_drv_info_t* bdi)
 void llm_noq_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 {
 	bdbm_hlm_req_t* hr = (bdbm_hlm_req_t*)llm_req->ptr_hlm_req;
-	uint8_t num = hr->hlm_number;
+	//uint8_t num = hr->hlm_number;
 	/* update pmu */
 	pmu_update_tot (bdi, llm_req);
 	pmu_inc (bdi, llm_req);
