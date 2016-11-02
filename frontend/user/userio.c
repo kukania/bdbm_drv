@@ -52,6 +52,8 @@ typedef struct {
 	bdbm_hlm_reqs_pool_t* hlm_reqs_pool;
 } bdbm_userio_private_t;
 
+uint64_t page_size[7] = {4,4,4,3,2,2,1};
+uint32_t order;
 
 uint32_t userio_open (bdbm_drv_info_t* bdi)
 {
@@ -125,16 +127,13 @@ void userio_close (bdbm_drv_info_t* bdi)
 void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 {
 
-bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
+	bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 	bdbm_blkio_req_t* br = (bdbm_blkio_req_t*)bio;
 	static bdbm_hlm_req_t* hr = NULL;
 	uint64_t req_size;
 	uint64_t ret = 0; 
 	uint32_t loop=0;
 	//bdbm_msg("start buf_make_req");
-
-
-
 
 	bdbm_sema_lock (&p->count_lock);
 	//bdbm_msg("p->nr_host_reqs %llu [make req]");
@@ -143,21 +142,24 @@ bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 
 	if(hr==NULL) {
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool); //hlmsize=0;
+		order=0;
 	}
 
 	while(1) 
 	{
 		req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
-		if(req_size <=4) 
+		hr->page_size = page_size[order];
+		if(req_size <= hr->page_size) 
 		{
 			ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br);
 			br->bi_bvec_index +=ret;
 			br->bi_offset += 8*ret;
 			hr-> hlm_number = loop;
-			if(req_size==4) {
+			if(req_size == hr->page_size) {
 				if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 					bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 				}
+				order = (order+1)%7;
 				hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 			}
 			break;
@@ -170,6 +172,7 @@ bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 		}
+		order = (order+1)%7;
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 	}
 //	bdbm_msg("end buf_make_req");

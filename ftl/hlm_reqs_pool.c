@@ -349,7 +349,8 @@ static int __hlm_reqs_pool_add_write_req(
 
 	uint64_t sec_start, sec_end, pg_start, pg_end;
 	uint64_t nr_charged = hr->nr_charged;
-	uint64_t nr_remain_page = 4 - nr_charged; //number of remain page
+	uint64_t req_page_size = hr->page_size;
+	uint64_t nr_remain_page = req_page_size - nr_charged; //number of remain page
 	uint64_t bvec_index = br->bi_bvec_index;
 	uint64_t nr_add = br->bi_bvec_cnt - bvec_index; // number of to add
 	uint64_t i,ret;
@@ -368,14 +369,14 @@ static int __hlm_reqs_pool_add_write_req(
 	bdbm_bug_on (pg_start >= pg_end);
 
 	//initialized empty page
-	if(nr_remain_page==4) {
+	if(nr_remain_page== req_page_size) {
 		hlm_reqs_pool_reset_fmain(ptr_fm);
 		hlm_reqs_pool_reset_logaddr(&ptr_lr->logaddr);
 	}
 
 	if(nr_add > nr_remain_page) {
 		ret = nr_remain_page;
-		for(i=nr_charged; i<4; i++) {
+		for(i=nr_charged; i<req_page_size; i++) {
 			ptr_lr->logaddr.lpa[i] = sec_start/ NR_KSECTORS_IN(pool->map_unit); 
 			ptr_fm->kp_stt[i] = KP_STT_DATA;
 			ptr_fm->kp_ptr[i] = br->bi_bvec_ptr[bvec_index++];

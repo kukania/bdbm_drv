@@ -224,7 +224,7 @@ typedef struct {
 		struct {
 		};
 	};
-
+	uint32_t page_size;
 	void* blkio_req[4];
 	uint8_t nr_pages_blk[4];	
 	uint8_t nr_blkio_req; /* number of blkio*/
