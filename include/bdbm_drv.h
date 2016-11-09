@@ -133,7 +133,7 @@ typedef struct {
 } bdbm_phyaddr_t;
 
 /* max kernel pages per physical flash page */
-#define BDBM_MAX_PAGES 4
+#define BDBM_MAX_PAGES 20
 
 /* a bluedbm blockio request */
 #define BDBM_BLKIO_MAX_VECS 512
@@ -226,8 +226,8 @@ typedef struct {
 		};
 	};
 	uint32_t page_size;
-	void* blkio_req[4];
-	uint8_t nr_pages_blk[4];	
+	void* blkio_req[BDBM_MAX_PAGES];
+	uint8_t nr_pages_blk[BDBM_MAX_PAGES];	
 	uint8_t nr_blkio_req; /* number of blkio*/
 	uint8_t nr_charged; /* How many subpage charged*/
 	uint32_t hlm_number;

@@ -46,7 +46,7 @@ enum BDBM_DEFAULT_NAND_PARAMS {
 	NAND_PAGE_SIZE = 4096*BDBM_MAX_PAGES,
 	NAND_PAGE_OOB_SIZE = 64,
 	NR_PAGES_PER_BLOCK = 64,
-	NR_BLOCKS_PER_CHIP = 128,
+	NR_BLOCKS_PER_CHIP = 256,
 	NR_CHIPS_PER_CHANNEL = 8,
 	NR_CHANNELS = 8,
 	NAND_HOST_BUS_TRANS_TIME_US = 0,	/* assume to be 0 */
@@ -140,7 +140,7 @@ bdbm_device_params_t get_default_device_params (void)
 	bdbm_bug_on (p.nr_subpages_per_page != BDBM_MAX_PAGES);
 #else
 //	p.nr_subpages_per_page = 1;
-	p.nr_subpages_per_page = 4;
+	p.nr_subpages_per_page = 20;
 #endif
 	p.nr_subpages_per_block = (p.nr_subpages_per_page * p.nr_pages_per_block);
 	p.nr_subpages_per_ssd = (p.nr_subpages_per_page * p.nr_pages_per_ssd);	/* the size of the subpage must be the same as the kernel-page size (4KB) */

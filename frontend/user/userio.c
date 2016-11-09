@@ -148,7 +148,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	while(1) 
 	{
 		req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
-		hr->page_size = page_size[order];
+		hr->page_size = page_size[order]; // 16K,12K,8K,4K...       80K support
 		if(req_size <= hr->page_size) 
 		{
 			ret = bdbm_hlm_reqs_pool_add(p->hlm_reqs_pool, hr, br);
