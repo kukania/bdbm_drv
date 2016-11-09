@@ -48,6 +48,7 @@ THE SOFTWARE.
 #include "algo/abm.h"
 #include "algo/page_ftl.h"
 
+/*#define DEBUG_HONG*/
 
 /* FTL interface */
 bdbm_ftl_inf_t _ftl_page_ftl = {
@@ -363,6 +364,7 @@ uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 
 	/* is it a valid logical address */
 	for (k = 0; k < np->nr_subpages_per_page; k++) {
+#ifdef DEBUG_HONG
                 printf("logaddr=%d, ofs=%d, phy:: ch=%d, chip=%d, block=%d, page_no=%d, k=%d\n",
                                 logaddr->lpa[k], logaddr->ofs, 
 				phyaddr->channel_no, 
@@ -370,6 +372,7 @@ uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 				phyaddr->block_no,
 				phyaddr->page_no,
 				k);
+#endif
 			
 		if (logaddr->lpa[k] == -1) {
 			/* the correpsonding subpage must be set to invalid for gc */

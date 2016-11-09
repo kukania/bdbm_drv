@@ -172,6 +172,7 @@ typedef enum {
 typedef struct {
 	int64_t lpa[BDBM_MAX_PAGES];
 	int32_t ofs;	/* only used for reads */
+	uint64_t lpa_cg;
 } bdbm_logaddr_t;
 
 typedef struct {
