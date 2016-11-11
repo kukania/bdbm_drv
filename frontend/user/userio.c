@@ -52,7 +52,7 @@ typedef struct {
 	bdbm_hlm_reqs_pool_t* hlm_reqs_pool;
 } bdbm_userio_private_t;
 
-uint64_t page_size[7] = {4,4,4,3,2,2,1};
+uint64_t page_size[] = {20,4,4,4,3,2,2,1};
 uint32_t order;
 
 uint32_t userio_open (bdbm_drv_info_t* bdi)
@@ -72,6 +72,7 @@ uint32_t userio_open (bdbm_drv_info_t* bdi)
 	bdbm_sema_init (&p->host_lock);
 	bdbm_sema_init (&p->count_lock);
 
+	bdbm_msg("open_nr_host %llu",p->nr_host_reqs);
 	/* create hlm_reqs pool */
 	if (bdi->parm_dev.nr_subpages_per_page == 1)
 		mapping_unit_size = bdi->parm_dev.page_main_size;
@@ -109,7 +110,7 @@ void userio_close (bdbm_drv_info_t* bdi)
 		}
 		bdbm_sema_unlock (&p->count_lock);
 
-		bdbm_msg ("p->nr_host_reqs = %llu", p->nr_host_reqs);
+		bdbm_msg ("p->nr_host_reqs = %llu", p->nr_host_reqs--);
 		bdbm_thread_msleep (1);
 	}
 
@@ -130,16 +131,20 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(bdi);
 	bdbm_blkio_req_t* br = (bdbm_blkio_req_t*)bio;
 	static bdbm_hlm_req_t* hr = NULL;
+	static bdbm_hlm_req_t* rhr = NULL;
 	uint64_t req_size;
 	uint64_t ret = 0; 
 	uint32_t loop=0;
 	//bdbm_msg("start buf_make_req");
 
 	bdbm_sema_lock (&p->count_lock);
-	//bdbm_msg("p->nr_host_reqs %llu [make req]");
+	bdbm_msg("p->nr_host_reqs %llu [make req]", p->nr_host_reqs);
 	p->nr_host_reqs++;
 	bdbm_sema_unlock (&p->count_lock);
 
+	if(rhr==NULL) {
+		rhr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
+	}
 	if(hr==NULL) {
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool); //hlmsize=0;
 		order=0;
@@ -159,7 +164,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 				if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 					bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 				}
-				order = (order+1)%7;
+				order = (order+1)%8;
 				hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 			}
 			break;
@@ -172,7 +177,7 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 		if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 			bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 		}
-		order = (order+1)%7;
+		order = (order+1)%8;
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 	}
 //	bdbm_msg("end buf_make_req");
@@ -258,17 +263,17 @@ void userio_end_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* req)
 			bdbm_sema_lock (&p->count_lock);
 			p->nr_host_reqs--;
 		//	bdbm_msg("reqs_done %d, bvec_cnt %d [end req]", cnt, r[i]->bi_bvec_cnt);
-		//	bdbm_msg("p->nr_host_reqs %llu [end req]");
+			bdbm_msg("p->nr_host_reqs %llu [end req]",p->nr_host_reqs);
 			bdbm_sema_unlock (&p->count_lock);
 
-//			bdbm_msg("-------------------- release blk_number [%d]-----------",r[i]->blk_number);
+		//	bdbm_msg("-------------------- release blk_number [%d]-----------",r[i]->blk_number);
 			r[i]->cb_done(r[i]);
 		}
 
 
 	}
 	/* destroy hlm_req */
-	//bdbm_msg("hlm free");
+//	bdbm_msg("hlm free");
 	
 	atomic64_set(&req->nr_llm_reqs_done,0);
 	bdbm_hlm_reqs_pool_free_item (p->hlm_reqs_pool, req);

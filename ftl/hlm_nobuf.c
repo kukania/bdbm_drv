@@ -299,8 +299,8 @@ void __hlm_nobuf_end_blkio_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* lr)
 
 //	bdbm_msg("hlm_get end req %d blk number[%d]", hr->hlm_number, br->blk_number);
 	if (atomic64_read (&hr->nr_llm_reqs_done) == hr->nr_llm_reqs) {
-	//	bdbm_msg("hlm_end_req %d   blk number[%d]",	hr->hlm_number,br->blk_number );
 		/* finish the host request */
+		//bdbm_msg("call host_inf->end_req");
 		bdi->ptr_host_inf->end_req (bdi, hr);
 	} else {
 		bdbm_error("nr_llm_reqs_done != nr_llm_reqs");

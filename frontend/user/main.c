@@ -411,6 +411,7 @@ int main (int argc, char** argv)
 					usleep(1000);
 				}
 				*/
+				
                 if(ops[0] == 'W'){
                         host_thread_fn_write_tracefile (offset, size);
                 }
@@ -439,7 +440,7 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
         int i = 0;
         uint32_t j = 0;
 	
-//		bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(_bdi);
+		//bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(_bdi);
 
 
 //		bdbm_msg("first fn_write tracefile");
@@ -468,8 +469,9 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
                 }
 
 //				bdbm_msg("host_inf->make_req start");
+				//bdbm_msg("p->nr_host_reqs %llu [write_tracefile]",p->nr_host_reqs);
 
-//				bdbm_msg("p->nr_host_reqs %llu [write_tracefile]",p->nr_host_reqs);
+
 //              bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
 				//bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
