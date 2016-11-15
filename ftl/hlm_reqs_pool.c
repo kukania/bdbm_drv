@@ -553,6 +553,63 @@ static int __hlm_reqs_pool_create_read_req (
 	return 0;
 }
 
+static int __hlm_reqs_pool_add_read_req (
+	bdbm_hlm_reqs_pool_t* pool, 
+	bdbm_hlm_req_t* hr,
+	bdbm_blkio_req_t* br)
+{
+	int64_t pg_start, pg_end, i = 0;
+	int64_t offset = 0, bvec_index = br->bi_bvec_index, nr_llm_reqs;
+	bdbm_llm_req_t* ptr_lr = NULL;
+
+	pg_start = BDBM_ALIGN_DOWN (br->bi_offset, NR_KSECTORS_IN(KPAGE_SIZE)) / NR_KSECTORS_IN(KPAGE_SIZE);
+	pg_end = BDBM_ALIGN_UP (br->bi_offset + br->bi_size, NR_KSECTORS_IN(KPAGE_SIZE)) / NR_KSECTORS_IN(KPAGE_SIZE);
+	bdbm_bug_on (pg_start >= pg_end);
+
+	/* build llm_reqs */
+	nr_llm_reqs = 1;
+
+	ptr_lr = &hr->llm_reqs[0];
+	for (i = 0; i < nr_llm_reqs; i++) {
+		offset = pg_start % NR_KPAGES_IN(pool->map_unit);
+
+		if (pool->in_place_rmw == 0) 
+			bdbm_bug_on (offset != 0);
+
+		hlm_reqs_pool_reset_fmain (&ptr_lr->fmain);
+		ptr_lr->fmain.kp_stt[offset] = KP_STT_DATA;
+		ptr_lr->fmain.kp_ptr[offset] = br->bi_bvec_ptr[bvec_index];
+		hlm_reqs_pool_alloc_fmain_pad (&ptr_lr->fmain);
+
+		hlm_reqs_pool_reset_logaddr (&ptr_lr->logaddr);
+		ptr_lr->req_type = br->bi_rw;
+		ptr_lr->logaddr.lpa[0] = pg_start / NR_KPAGES_IN(pool->map_unit);
+		if (pool->in_place_rmw == 1) 
+			ptr_lr->logaddr.ofs = 0;		/* offset in llm is already decided */
+		else
+			ptr_lr->logaddr.ofs = offset;	/* it must be adjusted after getting physical locations */
+		ptr_lr->ptr_hlm_req = (void*)hr;
+
+		/* go to the next */
+		pg_start++;
+		ptr_lr++;
+	}
+
+	//bdbm_bug_on (bvec_cnt != br->bi_bvec_cnt);
+
+	/* intialize hlm_req */
+	hr->req_type = br->bi_rw;
+	bdbm_stopwatch_start (&hr->sw);
+	hr->nr_llm_reqs = nr_llm_reqs;
+	atomic64_set (&hr->nr_llm_reqs_done, 0);
+	bdbm_sema_lock (&hr->done);
+	hr->blkio_req[hr->nr_blkio_req] = (void*)br;  // one hr, one br
+	hr->nr_pages_blk[hr->nr_blkio_req] = 1; // one hr, just 4k read
+	hr->nr_blkio_req++;
+	hr->ret = 0;
+
+	return 1;
+}
 int bdbm_hlm_reqs_pool_add(
 	bdbm_hlm_reqs_pool_t* pool,
 	bdbm_hlm_req_t* hr,
@@ -564,6 +621,7 @@ int bdbm_hlm_reqs_pool_add(
 	} else if(br->bi_rw == REQTYPE_WRITE) {
 		ret = __hlm_reqs_pool_add_write_req(pool, hr, br);
 	} else if(br->bi_rw == REQTYPE_READ) {
+		ret = __hlm_reqs_pool_add_read_req(pool,hr,br);
 	}
 
 	return ret;

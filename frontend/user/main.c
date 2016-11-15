@@ -500,7 +500,7 @@ void* host_thread_fn_read_tracefile (size_t offset, int size)
                 blkio_req->bi_offset = offset;
                 blkio_req->bi_size = size;
                 blkio_req->bi_bvec_cnt = size / 8;
-                blkio_req->cb_done = write_done;
+                blkio_req->cb_done = write_done;  // why write_done?
                 blkio_req->user = (void*)blkio_req;
                 blkio_req->user2 = (bdbm_sema_t*)bdbm_malloc (sizeof (bdbm_sema_t));
 
@@ -511,12 +511,12 @@ void* host_thread_fn_read_tracefile (size_t offset, int size)
                         blkio_req->bi_bvec_ptr[j] = blkio_req->bi_bvec_ptr[0];
                 }
 
-                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+//                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
-                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+//                bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
 
-                bdbm_free (blkio_req->bi_bvec_ptr[0]);
-                bdbm_free (blkio_req);
+//                bdbm_free (blkio_req->bi_bvec_ptr[0]);
+//              bdbm_free (blkio_req);
 
                 offset += size;
                 w_cnt++;
