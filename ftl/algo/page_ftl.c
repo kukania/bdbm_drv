@@ -92,6 +92,7 @@ typedef struct {
 	/* for the management of active blocks */
 	uint64_t curr_puid;
 	uint64_t curr_page_ofs;
+	uint64_t curr_subpage_ofs;
 	bdbm_abm_block_t** ac_bab;
 
 	/* reserved for gc (reused whenever gc is invoked) */
@@ -218,6 +219,7 @@ uint32_t bdbm_page_ftl_create (bdbm_drv_info_t* bdi)
 	}
 	p->curr_puid = 0;
 	p->curr_page_ofs = 0;
+	p->curr_subpage_ofs = 0;
 	p->nr_punits = np->nr_chips_per_channel * np->nr_channels;
 	p->nr_punits_pages = p->nr_punits * np->nr_pages_per_block;
 	bdbm_spin_lock_init (&p->ftl_lock);
@@ -300,6 +302,20 @@ void bdbm_page_ftl_destroy (bdbm_drv_info_t* bdi)
 	bdbm_free (p);
 }
 
+uint32_t bdbm_page_ftl_tell_free_ppa(
+		bdbm_drv_info_t* bdi,
+		bdbm_phyaddr_t *ppa)
+{
+	bdbm_page_ftl_private_t* p = _ftl_page_ftl.ptr_private;
+	bdbm_device_params_t* np = BDBM_GET_DEVICE_PARAMS(bdi);
+	bdbm_abm_block_t* b = NULL;
+	uint64_t curr_channel;
+	uint64_t curr_chip;
+	uint64_t curr_subpage_ofs;
+
+	
+	return p->curr_subpage_ofs;
+}
 uint32_t bdbm_page_ftl_get_free_ppa (
 	bdbm_drv_info_t* bdi, 
 	int64_t lpa,
@@ -320,6 +336,7 @@ uint32_t bdbm_page_ftl_get_free_ppa (
 	ppa->channel_no =  b->channel_no;
 	ppa->chip_no = b->chip_no;
 	ppa->block_no = b->block_no;
+	//why p->curr_page_ofs 
 	ppa->page_no = p->curr_page_ofs;
 	ppa->punit_id = BDBM_GET_PUNIT_ID (bdi, ppa);
 
@@ -394,7 +411,7 @@ uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 		me = &p->ptr_mapping_table[logaddr->lpa[k]];
 		bdbm_bug_on (me == NULL);
 
-		/* update the mapping table */
+		/* update the mapping table **/
 		if (me->status == PFTL_PAGE_VALID) {
 			bdbm_abm_invalidate_page (
 				p->bai, 
@@ -778,6 +795,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 			if ((b = __bdbm_page_ftl_victim_selection_greedy (bdi, i, j))) {
 				p->gc_bab[nr_gc_blks] = b;
 				nr_gc_blks++;
+				bdbm_msg("victim block number : %lld", b->block_no);
 			}
 		}
 	}

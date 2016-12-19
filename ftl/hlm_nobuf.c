@@ -58,6 +58,7 @@ bdbm_hlm_inf_t _hlm_nobuf_inf = {
 	/*.store = hlm_nobuf_store,*/
 };
 
+extern uint64_t read_cnt[21];
 bdbm_hlm_req_t * hlm_buf_ptr;
 
 /* data structures for hlm_nobuf */
@@ -123,7 +124,9 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 					/* Note that there could be dummy reads (e.g., when the
 					 * file-systems are initialized) */
 					lr->req_type = REQTYPE_READ_DUMMY;
+					bdbm_msg("dummy READ");
 				} else {
+					read_cnt[lr->phyaddr.page_no %7]++;
 					hlm_reqs_pool_relocate_kp (lr, sp_ofs);
 				}
 			} else if (bdbm_is_write (lr->req_type)) {

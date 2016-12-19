@@ -1,5 +1,5 @@
 /*
-The MIT License (MIT)
+/The MIT License (MIT)
 
 Copyright (c) 2014-2015 CSAIL, MIT
 
@@ -70,6 +70,8 @@ bdbm_drv_info_t* _bdi = NULL;
 #include "bdbm_drv.h"
 #include "uatomic64.h"
 
+uint64_t read_cnt[21];
+uint64_t  write_cnt[21];
 static int w_cnt = 0;
 
 void* host_thread_fn_read_tracefile (size_t offset, int size);
@@ -317,6 +319,7 @@ int main (int argc, char** argv)
 		long long time,elapsed_time; // time(ms)
         size_t offset, limit=0;
         int size;
+		int nr;
 		bdbm_stopwatch_t sw;
 
 		//bdbm_msg ("[main] run ftlib... (%d)", sizeof (bdbm_llm_req_t));
@@ -398,8 +401,10 @@ int main (int argc, char** argv)
 
 				
                 printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
-                if(offset >= limit)
+                if(offset >= limit){
+						printf("offset >= limit\n");
                         continue;
+				}
 
 				/*
 				time = sec*1000 + usec/(1000*1000);
@@ -430,6 +435,20 @@ int main (int argc, char** argv)
         bdbm_dm_exit (_bdi);
         bdbm_drv_destroy (_bdi);
 
+		/*
+		nr = 1;
+		for(nr=4; nr>=1; nr--) 
+		printf("%d write: %lld\n", 4*nr, write_cnt[nr]);
+		*/
+
+		nr = 20;
+		printf("%dKB write %lld\n", 4*nr, write_cnt[nr]);
+
+		printf("16KB ZONE read %lld\n", read_cnt[0]+read_cnt[1]+read_cnt[2]);
+		printf("12KB ZONE read %lld\n", read_cnt[3]);
+		printf("8KB ZONE read %lld\n", read_cnt[4]+read_cnt[5]);
+		printf("4KB ZONE read %lld\n", read_cnt[6]);
+		
         bdbm_msg ("[main] done");
 
         return 0;
@@ -442,8 +461,6 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 	
 		//bdbm_userio_private_t* p = (bdbm_userio_private_t*)BDBM_HOST_PRIV(_bdi);
 
-
-//		bdbm_msg("first fn_write tracefile");
         for (i = 0; i < 1; i++) {
 
                 bdbm_blkio_req_t* blkio_req = (bdbm_blkio_req_t*)bdbm_malloc (sizeof (bdbm_blkio_req_t));
