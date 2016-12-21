@@ -52,9 +52,6 @@ typedef struct {
 	bdbm_hlm_reqs_pool_t* hlm_reqs_pool;
 } bdbm_userio_private_t;
 
-#define NR_TYPE 1
-uint64_t page_size[] = {20};
-uint32_t order;
 extern uint64_t write_cnt[21];
 
 
@@ -151,7 +148,6 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	}
 	if(hr==NULL) {
 		hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool); //hlmsize=0;
-		order=0;
 	}
 
 
@@ -171,7 +167,8 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 		while(1) 
 		{
 			req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
-			hr->page_size = page_size[order]; // 16K,12K,8K,4K...       80K support
+			hr->page_size = bdi->ptr_ftl_inf->get_next_ppa(bdi); // 16K,12K,8K,4K...       80K support
+			bdbm_msg("userio_buf_make_req subpage_size %lld", hr->page_size);
 			if(req_size <= hr->page_size) 
 			{
 //				bdbm_msg("req_size %lld", req_size);
@@ -180,11 +177,10 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 				br->bi_offset += 8*ret;
 				hr-> hlm_number = loop;
 				if(req_size == hr->page_size) {
-					write_cnt[page_size[order]]++;	
+					write_cnt[hr->page_size]++;	
 					if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 						bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 					}
-					order = (order+1)%NR_TYPE;
 					hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 				}
 				break;
@@ -194,11 +190,10 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 			br->bi_bvec_index +=ret;
 			br->bi_offset += 8*ret;
 			hr-> hlm_number = loop;
-			write_cnt[page_size[order]]++;
+			write_cnt[hr->page_size]++;
 			if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 				bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 			}
-			order = (order+1)%NR_TYPE;
 			hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
 		}
 

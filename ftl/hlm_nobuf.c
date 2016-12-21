@@ -113,6 +113,9 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	uint64_t i = 0, j = 0, sp_ofs;
 	bdbm_blkio_req_t* br =(bdbm_blkio_req_t*)hr->blkio_req[0]; //must be changed!
 
+	//hr->llm_reqs[0].subpage_ofs = hr->subpage_ofs;
+	hr->llm_reqs[0].nr_valid = hr->page_size;
+
 	/* perform mapping with the FTL */
 	bdbm_hlm_for_each_llm_req (lr, hr, i) {
 	//	bdbm_msg("hlm_for_each_llm_req : %lld",i);
@@ -130,11 +133,12 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 					hlm_reqs_pool_relocate_kp (lr, sp_ofs);
 				}
 			} else if (bdbm_is_write (lr->req_type)) {
-				if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], &lr->phyaddr) != 0) {
+				if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], &lr->phyaddr,&sp_ofs) != 0) {
 					bdbm_error ("`ftl->get_free_ppa' failed");
 					goto fail;
 				}
-				if (ftl->map_lpa_to_ppa (bdi, &lr->logaddr, &lr->phyaddr) != 0) {
+				lr->subpage_ofs = sp_ofs;
+				if (ftl->map_lpa_to_ppa (bdi, &lr->logaddr, &lr->phyaddr, lr) != 0) {
 					bdbm_error ("`ftl->map_lpa_to_ppa' failed");
 					goto fail;
 				}
@@ -156,11 +160,11 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 			}
 
 			/* getting the location to which data will be written */
-			if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], phyaddr) != 0) {
+			if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], phyaddr, &sp_ofs) != 0) {
 				bdbm_error ("`ftl->get_free_ppa' failed");
 				goto fail;
 			}
-			if (ftl->map_lpa_to_ppa (bdi, &lr->logaddr, phyaddr) != 0) {
+			if (ftl->map_lpa_to_ppa (bdi, &lr->logaddr, phyaddr,lr) != 0) {
 				bdbm_error ("`ftl->map_lpa_to_ppa' failed");
 				goto fail;
 			}

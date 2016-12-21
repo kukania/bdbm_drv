@@ -130,6 +130,7 @@ typedef struct {
 	uint64_t chip_no;
 	uint64_t block_no;
 	uint64_t page_no;
+	uint64_t subpage_no;
 } bdbm_phyaddr_t;
 
 /* max kernel pages per physical flash page */
@@ -192,6 +193,8 @@ typedef struct {
 	void* ptr_qitem;
 	bdbm_sema_t* done;	/* maybe used by applications that require direct notifications from an interrupt handler */
 
+	uint32_t subpage_ofs;
+	uint32_t nr_valid;
 	/* logical / physical info */
 	bdbm_logaddr_t logaddr;
 	bdbm_phyaddr_t phyaddr;
@@ -225,7 +228,8 @@ typedef struct {
 		struct {
 		};
 	};
-	uint32_t page_size;
+	uint64_t page_size;
+	uint64_t subpage_ofs;
 	void* blkio_req[BDBM_MAX_PAGES];
 	uint8_t nr_pages_blk[BDBM_MAX_PAGES];	
 	uint8_t nr_blkio_req; /* number of blkio*/
@@ -325,10 +329,12 @@ typedef struct {
 typedef struct {
 	void* ptr_private;
 	uint32_t (*create) (bdbm_drv_info_t* bdi);
+
 	void (*destroy) (bdbm_drv_info_t* bdi);
-	uint32_t (*get_free_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa);
+	uint32_t (*get_next_ppa) (bdbm_drv_info_t* bdi);
+	uint32_t (*get_free_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
 	uint32_t (*get_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
-	uint32_t (*map_lpa_to_ppa) (bdbm_drv_info_t* bdi, bdbm_logaddr_t* logaddr, bdbm_phyaddr_t* ppa);
+	uint32_t (*map_lpa_to_ppa) (bdbm_drv_info_t* bdi, bdbm_logaddr_t* logaddr, bdbm_phyaddr_t* ppa, bdbm_llm_req_t* lr);
 	uint32_t (*invalidate_lpa) (bdbm_drv_info_t* bdi, int64_t lpa, uint64_t len);
 	uint32_t (*do_gc) (bdbm_drv_info_t* bdi, int64_t lpa);
 	uint8_t (*is_gc_needed) (bdbm_drv_info_t* bdi, int64_t lpa);

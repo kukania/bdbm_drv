@@ -50,11 +50,15 @@ THE SOFTWARE.
 
 /*#define DEBUG_HONG*/
 
+uint32_t subpage_size[] = {20};  
+uint32_t ofs;
+
 /* FTL interface */
 bdbm_ftl_inf_t _ftl_page_ftl = {
 	.ptr_private = NULL,
 	.create = bdbm_page_ftl_create,
 	.destroy = bdbm_page_ftl_destroy,
+	.get_next_ppa = bdbm_page_ftl_tell_subpage_size,
 	.get_free_ppa = bdbm_page_ftl_get_free_ppa,
 	.get_ppa = bdbm_page_ftl_get_ppa,
 	.map_lpa_to_ppa = bdbm_page_ftl_map_lpa_to_ppa,
@@ -302,24 +306,20 @@ void bdbm_page_ftl_destroy (bdbm_drv_info_t* bdi)
 	bdbm_free (p);
 }
 
-uint32_t bdbm_page_ftl_tell_free_ppa(
-		bdbm_drv_info_t* bdi,
-		bdbm_phyaddr_t *ppa)
+uint32_t bdbm_page_ftl_tell_subpage_size(
+		bdbm_drv_info_t* bdi
+		)	
 {
 	bdbm_page_ftl_private_t* p = _ftl_page_ftl.ptr_private;
-	bdbm_device_params_t* np = BDBM_GET_DEVICE_PARAMS(bdi);
-	bdbm_abm_block_t* b = NULL;
-	uint64_t curr_channel;
-	uint64_t curr_chip;
-	uint64_t curr_subpage_ofs;
 
-	
-	return p->curr_subpage_ofs;
+	return subpage_size[ofs];
 }
+
 uint32_t bdbm_page_ftl_get_free_ppa (
 	bdbm_drv_info_t* bdi, 
 	int64_t lpa,
-	bdbm_phyaddr_t* ppa)
+	bdbm_phyaddr_t* ppa,
+	uint64_t* sp_ofs)
 {
 	bdbm_page_ftl_private_t* p = _ftl_page_ftl.ptr_private;
 	bdbm_device_params_t* np = BDBM_GET_DEVICE_PARAMS (bdi);
@@ -338,6 +338,7 @@ uint32_t bdbm_page_ftl_get_free_ppa (
 	ppa->block_no = b->block_no;
 	//why p->curr_page_ofs 
 	ppa->page_no = p->curr_page_ofs;
+	ppa->subpage_no = p->curr_subpage_ofs;
 	ppa->punit_id = BDBM_GET_PUNIT_ID (bdi, ppa);
 
 	/* check some error cases before returning the physical address */
@@ -345,49 +346,60 @@ uint32_t bdbm_page_ftl_get_free_ppa (
 	bdbm_bug_on (ppa->chip_no != curr_chip);
 	bdbm_bug_on (ppa->page_no >= np->nr_pages_per_block);
 
-	/* go to the next parallel unit */
-	if ((p->curr_puid + 1) == p->nr_punits) {
-		p->curr_puid = 0;
-		p->curr_page_ofs++;	/* go to the next page */
+	*sp_ofs = p->curr_subpage_ofs;
 
-		/* see if there are sufficient free pages or not */
-		if (p->curr_page_ofs == np->nr_pages_per_block) {
-			/* get active blocks */
-			if (__bdbm_page_ftl_get_active_blocks (np, p->bai, p->ac_bab) != 0) {
-				bdbm_error ("__bdbm_page_ftl_get_active_blocks failed");
-				return 1;
+	p->curr_subpage_ofs += subpage_size[ofs];
+	ofs++;
+	if((p->curr_subpage_ofs == np->nr_subpages_per_page)) {
+		p->curr_subpage_ofs = 0;
+		ofs = 0;
+		/* go to the next parallel unit */
+		if ((p->curr_puid + 1) == p->nr_punits) {
+			p->curr_puid = 0;
+			p->curr_page_ofs++;	/* go to the next page */
+
+			/* see if there are sufficient free pages or not */
+			if (p->curr_page_ofs == np->nr_pages_per_block) {
+				/* get active blocks */
+				if (__bdbm_page_ftl_get_active_blocks (np, p->bai, p->ac_bab) != 0) {
+					bdbm_error ("__bdbm_page_ftl_get_active_blocks failed");
+					return 1;
+				}
+				/* ok; go ahead with 0 offset */
+				/*bdbm_msg ("curr_puid = %llu", p->curr_puid);*/
+				p->curr_page_ofs = 0;
 			}
-			/* ok; go ahead with 0 offset */
+		} else {
 			/*bdbm_msg ("curr_puid = %llu", p->curr_puid);*/
-			p->curr_page_ofs = 0;
+			p->curr_puid++;
 		}
-	} else {
-		/*bdbm_msg ("curr_puid = %llu", p->curr_puid);*/
-		p->curr_puid++;
 	}
-
+	
 	return 0;
 }
 
 uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 	bdbm_drv_info_t* bdi, 
 	bdbm_logaddr_t* logaddr,
-	bdbm_phyaddr_t* phyaddr)
+	bdbm_phyaddr_t* phyaddr,
+	bdbm_llm_req_t* lr)
 {
 	bdbm_device_params_t* np = BDBM_GET_DEVICE_PARAMS (bdi);
 	bdbm_page_ftl_private_t* p = _ftl_page_ftl.ptr_private;
 	bdbm_page_mapping_entry_t* me = NULL;
-	int k;
+	uint32_t k;
+	uint32_t ofs = lr->subpage_ofs;
+	
 
 	/* is it a valid logical address */
-	for (k = 0; k < np->nr_subpages_per_page; k++) {
-/*                printf("logaddr=%d, ofs=%d, phy:: ch=%d, chip=%d, block=%d, page_no=%d, k=%d\n",
+	for (k = 0; k < lr->nr_valid ; k++) {
+/*              printf("logaddr=%d, ofs=%d, phy:: ch=%d, chip=%d, block=%d, page_no=%d, k=%d\n",
                                 logaddr->lpa[k], logaddr->ofs, 
 				phyaddr->channel_no, 
 				phyaddr->chip_no,
 				phyaddr->block_no,
 				phyaddr->page_no,
-				k);
+				ofs+k);
 */			
 		if (logaddr->lpa[k] == -1) {
 			/* the correpsonding subpage must be set to invalid for gc */
@@ -397,7 +409,7 @@ uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 				phyaddr->chip_no,
 				phyaddr->block_no,
 				phyaddr->page_no,
-				k
+				ofs+k
 			);
 			continue;
 		}
@@ -427,7 +439,7 @@ uint32_t bdbm_page_ftl_map_lpa_to_ppa (
 		me->phyaddr.chip_no = phyaddr->chip_no;
 		me->phyaddr.block_no = phyaddr->block_no;
 		me->phyaddr.page_no = phyaddr->page_no;
-		me->sp_off = k;
+		me->sp_off = ofs+k;
 	}
 
 	return 0;
@@ -799,6 +811,9 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 			}
 		}
 	}
+
+	bdbm_msg("ftl_do_gc after select victim block");
+
 	if (nr_gc_blks < nr_punits) {
 		/* TODO: we need to implement a load balancing feature to avoid this */
 		/*bdbm_warning ("TODO: this warning will be removed with load-balancing");*/
@@ -873,6 +888,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 			bdbm_bug_on (1);
 		}
 	}
+	bdbm_msg("read cnt is %lld", nr_llm_reqs);
 	bdbm_sema_lock (&hlm_gc->done);
 	bdbm_sema_unlock (&hlm_gc->done);
 
@@ -928,7 +944,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 	/*bdbm_msg ("compaction: %llu => %llu", nr_llm_reqs, hlm_gc_w->nr_llm_reqs);*/
 
 	nr_llm_reqs = hlm_gc_w->nr_llm_reqs;
-
+	uint64_t sp_ofs;
 	/* build hlm_req_gc for writes */
 	for (i = 0; i < nr_llm_reqs; i++) {
 		bdbm_llm_req_t* r = &hlm_gc_w->llm_reqs[i];
@@ -945,11 +961,11 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 			}
 		}
 		r->ptr_hlm_req = (void*)hlm_gc_w;
-		if (bdbm_page_ftl_get_free_ppa (bdi, 0, &r->phyaddr) != 0) {
+		if (bdbm_page_ftl_get_free_ppa (bdi, 0, &r->phyaddr,&sp_ofs) != 0) {
 			bdbm_error ("bdbm_page_ftl_get_free_ppa failed");
 			bdbm_bug_on (1);
 		}
-		if (bdbm_page_ftl_map_lpa_to_ppa (bdi, &r->logaddr, &r->phyaddr) != 0) {
+		if (bdbm_page_ftl_map_lpa_to_ppa (bdi, &r->logaddr, &r->phyaddr,r) != 0) {
 			bdbm_error ("bdbm_page_ftl_map_lpa_to_ppa failed");
 			bdbm_bug_on (1);
 		}

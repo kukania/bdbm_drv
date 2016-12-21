@@ -126,7 +126,7 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
     uint64_t idx = (r->phyaddr.channel_no * dp.nr_blocks_per_channel * dp.nr_subpages_per_block) + 
         (r->phyaddr.chip_no * dp.nr_blocks_per_chip * dp.nr_subpages_per_block) + 
         (r->phyaddr.block_no * dp.nr_subpages_per_block) + r->phyaddr.page_no*dp.nr_subpages_per_page;
-
+	uint32_t ofs = r->subpage_ofs;
 
 
     /*TODO: do somthing */
@@ -137,26 +137,27 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
           //  printf("DUMMY_DEVICE: \n");
 		  //printf("Write req OOB: \n");
 
-		  for(i = 0; i < BDBM_MAX_PAGES; i++) {
+		  for(i = 0; i < r->nr_valid ; i++) {
 			  if(r->logaddr.lpa[i] == -1) continue;
-			  bdbm_bug_on (r->fmain.kp_stt[r->logaddr.ofs] != KP_STT_DATA);
-			  p->oob_data[idx + i] = r->logaddr.lpa[i];
-	/*		  printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
+			  bdbm_bug_on (r->fmain.kp_stt[i] != KP_STT_DATA);
+			  p->oob_data[idx + i + ofs] = r->logaddr.lpa[i];
+			  /*printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
 					  r->logaddr.lpa[i],
 					  r->phyaddr.channel_no,
 					  r->phyaddr.chip_no,
 					  r->phyaddr.block_no,
 					  r->phyaddr.page_no,
 					  r->phyaddr.punit_id,
-					  i,
-					  r->logaddr.ofs, r->fmain.kp_ptr[r->logaddr.ofs]); */
-
+					  ofs+i,
+					  r->fmain.kp_ptr[i]); 
+				*/
 		  }
 
     }else if(bdbm_is_read(r->req_type)){
         for (i = 0; i < BDBM_MAX_PAGES; i++){
             if(r->fmain.kp_stt[i] == KP_STT_DATA){
                 ((uint64_t*)r->foob.data)[i] = p->oob_data[idx + i];
+				//must add offset info
               /*  printf("DUMMY_READ: \n");
                 printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
                         p->oob_data[idx + i],
