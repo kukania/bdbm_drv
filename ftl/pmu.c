@@ -57,13 +57,23 @@ void pmu_create (bdbm_drv_info_t* bdi)
 	/*atomic64_set (&bdi->pm.exetime_us, time_get_timestamp_in_us ());*/
 	bdbm_stopwatch_start (&bdi->pm.exetime);
 	atomic64_set (&bdi->pm.page_read_cnt, 0);
+	for(i=0; i<5; i++)
+		bdi->pm.page_zone_read[i] = 0;
+
 	atomic64_set (&bdi->pm.page_write_cnt, 0);
+	for(i=0; i<21; i++)
+		bdi->pm.subpage_write_cnt[i] = 0;
+
 	atomic64_set (&bdi->pm.rmw_read_cnt, 0);
 	atomic64_set (&bdi->pm.rmw_write_cnt, 0);
 	atomic64_set (&bdi->pm.gc_cnt, 0);
 	atomic64_set (&bdi->pm.gc_erase_cnt, 0);
 	atomic64_set (&bdi->pm.gc_read_cnt, 0);
+	for(i=0; i<5; i++)
+		bdi->pm.gc_page_zone_read[i] = 0;
 	atomic64_set (&bdi->pm.gc_write_cnt, 0);
+	for(i=0; i<21; i++)
+		bdi->pm.gc_subpage_write_cnt[i] = 0;
 
 	/* elapsed times taken to handle normal I/Os */
 	bdi->pm.time_r_sw = 0;
@@ -117,12 +127,18 @@ void pmu_inc (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 	uint64_t pid = llm_req->phyaddr.punit_id;
 #endif
 
+	uint32_t i=0;
+	uint32_t nr = llm_req->nr_valid;
+
 	switch (llm_req->req_type) {
 	case REQTYPE_READ:
 		pmu_inc_read (bdi);
+		pmu_inc_zone_read(bdi,llm_req->logaddr.ofs); 
 		pmu_inc_util_r (bdi, pid);
 		break;
 	case REQTYPE_WRITE:
+		pmu_inc_subpage_write(bdi,nr);
+
 		pmu_inc_write (bdi);
 		pmu_inc_util_w (bdi, pid);
 		break;
@@ -135,10 +151,19 @@ void pmu_inc (bdbm_drv_info_t* bdi, bdbm_llm_req_t* llm_req)
 		pmu_inc_util_w (bdi, pid);
 		break;
 	case REQTYPE_GC_READ:
-		pmu_inc_gc_read (bdi);
+
+		for(i=0; i < bdi->parm_dev.nr_subpages_per_page;i++) {
+			if(llm_req->fmain.kp_stt[i]==KP_STT_DATA) {
+				pmu_inc_gc_zone_read(bdi,i);
+				pmu_inc_gc_read (bdi);	
+			}
+		}
+			
 		pmu_inc_util_r (bdi, pid);
 		break;
 	case REQTYPE_GC_WRITE:
+		pmu_inc_gc_subpage_write(bdi,nr);
+
 		pmu_inc_gc_write (bdi);
 		pmu_inc_util_w (bdi, pid);
 		break;
@@ -163,9 +188,23 @@ void pmu_inc_read (bdbm_drv_info_t* bdi)
 	atomic64_inc (&bdi->pm.page_read_cnt);
 }
 
+void pmu_inc_zone_read(bdbm_drv_info_t* bdi, uint32_t ofs)
+{
+	if(ofs<12) bdi->pm.page_zone_read[4]++;
+	else if(12 <= ofs && ofs <15) bdi->pm.page_zone_read[3]++;
+	else if(15 <= ofs && ofs <19) bdi->pm.page_zone_read[2]++;
+	else if(19 <= ofs && ofs <20) bdi->pm.page_zone_read[1]++;
+	else bdbm_bug_on(1);
+}
+
 void pmu_inc_write (bdbm_drv_info_t* bdi) 
 {
 	atomic64_inc (&bdi->pm.page_write_cnt);
+}
+
+void pmu_inc_subpage_write(bdbm_drv_info_t* bdi, uint32_t nr)
+{
+	bdi->pm.subpage_write_cnt[nr]++;
 }
 
 void pmu_inc_rmw_read (bdbm_drv_info_t* bdi) 
@@ -193,9 +232,24 @@ void pmu_inc_gc_read (bdbm_drv_info_t* bdi)
 	atomic64_inc (&bdi->pm.gc_read_cnt);
 }
 
+void pmu_inc_gc_zone_read(bdbm_drv_info_t* bdi, uint32_t ofs)
+{
+	if(ofs<12) bdi->pm.gc_page_zone_read[4]++;
+	else if(12 <= ofs && ofs <15) bdi->pm.gc_page_zone_read[3]++;
+	else if(15 <= ofs && ofs <19) bdi->pm.gc_page_zone_read[2]++;
+	else if(19 <= ofs && ofs <20) bdi->pm.gc_page_zone_read[1]++;
+	else bdbm_bug_on(1);
+
+}
+
 void pmu_inc_gc_write (bdbm_drv_info_t* bdi)
 {
 	atomic64_inc (&bdi->pm.gc_write_cnt);
+}
+
+void pmu_inc_gc_subpage_write(bdbm_drv_info_t* bdi, uint32_t nr)
+{
+	bdi->pm.gc_subpage_write_cnt[nr]++;
 }
 
 void pmu_inc_util_r (bdbm_drv_info_t* bdi, uint64_t id)
@@ -451,13 +505,24 @@ void pmu_display (bdbm_drv_info_t* bdi)
 		atomic64_read (&bdi->pm.gc_read_cnt) + 
 		atomic64_read (&bdi->pm.meta_read_cnt)
 	);
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB ZONE reads: %ld", i*4,
+				bdi->pm.page_zone_read[i] +
+				bdi->pm.gc_page_zone_read[i] );
+	}
 	bdbm_msg ("# of page writes: %ld", 
 		atomic64_read (&bdi->pm.page_write_cnt) +
 		atomic64_read (&bdi->pm.rmw_write_cnt) +
 		atomic64_read (&bdi->pm.gc_write_cnt) +
 		atomic64_read (&bdi->pm.meta_write_cnt)
 	);
-
+	/* for RIO-IMP
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB page write: %ld", i*4,
+				bdi->pm.subpage_write_cnt[i] +
+				bdi->pm.gc_subpage_write_cnt[i] );
+	}
+	*/
 	bdbm_msg ("# of block erase: %ld", 
 		atomic64_read (&bdi->pm.gc_erase_cnt));
 	bdbm_msg ("");
@@ -465,8 +530,17 @@ void pmu_display (bdbm_drv_info_t* bdi)
 	bdbm_msg ("[2] Normal I/Os");
 	bdbm_msg ("# of page reads: %ld", 
 		atomic64_read (&bdi->pm.page_read_cnt));
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB ZONE reads: %ld", i*4, bdi->pm.page_zone_read[i]);
+	}
 	bdbm_msg ("# of page writes: %ld", 
 		atomic64_read (&bdi->pm.page_write_cnt));
+
+	/* for RIO-IMP
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB page writes: %ld",i*4, bdi->pm.subpage_write_cnt[i]);
+	}
+	*/
 	bdbm_msg ("# of page rmw reads: %ld", 
 		atomic64_read (&bdi->pm.rmw_read_cnt));
 	bdbm_msg ("# of page rmw writes: %ld", 
@@ -478,9 +552,20 @@ void pmu_display (bdbm_drv_info_t* bdi)
 	bdbm_msg ("# of GC invocation: %ld",
 		atomic64_read (&bdi->pm.gc_cnt));
 	bdbm_msg ("# of page reads: %ld",
-		atomic64_read (&bdi->pm.gc_read_cnt));
+			atomic64_read (&bdi->pm.gc_read_cnt));
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB ZONE reads: %ld", i*4, bdi->pm.gc_page_zone_read[i]);
+	}
 	bdbm_msg ("# of page writes: %ld",
 		atomic64_read (&bdi->pm.gc_write_cnt));
+	
+	
+	/* for RIO-IMP
+	for(i=4; i>0; i--) {
+		bdbm_msg("	# of %ldKB page writes: %ld",i*4, bdi->pm.gc_subpage_write_cnt[i]);
+	}
+	*/
+	
 	bdbm_msg ("# of block erase: %ld", 
 		atomic64_read (&bdi->pm.gc_erase_cnt));
 	bdbm_msg ("");

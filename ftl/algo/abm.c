@@ -297,6 +297,7 @@ bdbm_abm_block_t* bdbm_abm_get_free_block_prepare (
 		}
 	}
 
+//	bdbm_msg("get free block number %lld", blk->block_no);
 	return blk;
 }
 

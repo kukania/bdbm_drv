@@ -44,7 +44,7 @@ uint32_t bdbm_page_ftl_store (bdbm_drv_info_t* bdi, const char* fn);
 uint32_t bdbm_page_ftl_create (bdbm_drv_info_t* bdi);
 void bdbm_page_ftl_destroy (bdbm_drv_info_t* bdi);
 uint32_t bdbm_page_ftl_tell_subpage_size(bdbm_drv_info_t* bdi);
-uint32_t bdbm_page_ftl_get_free_ppa (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
+uint32_t bdbm_page_ftl_get_free_ppa (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, bdbm_llm_req_t* lr);
 uint32_t bdbm_page_ftl_get_ppa (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
 uint32_t bdbm_page_ftl_map_lpa_to_ppa (bdbm_drv_info_t* bdi, bdbm_logaddr_t* logaddr, bdbm_phyaddr_t* ppa, bdbm_llm_req_t* lr);
 uint32_t bdbm_page_ftl_invalidate_lpa (bdbm_drv_info_t* bdi, int64_t lpa, uint64_t len);

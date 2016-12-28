@@ -332,7 +332,7 @@ typedef struct {
 
 	void (*destroy) (bdbm_drv_info_t* bdi);
 	uint32_t (*get_next_ppa) (bdbm_drv_info_t* bdi);
-	uint32_t (*get_free_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
+	uint32_t (*get_free_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa,bdbm_llm_req_t* lr);
 	uint32_t (*get_ppa) (bdbm_drv_info_t* bdi, int64_t lpa, bdbm_phyaddr_t* ppa, uint64_t* sp_off);
 	uint32_t (*map_lpa_to_ppa) (bdbm_drv_info_t* bdi, bdbm_logaddr_t* logaddr, bdbm_phyaddr_t* ppa, bdbm_llm_req_t* lr);
 	uint32_t (*invalidate_lpa) (bdbm_drv_info_t* bdi, int64_t lpa, uint64_t len);
@@ -361,13 +361,19 @@ typedef struct {
 	bdbm_spinlock_t pmu_lock;
 	bdbm_stopwatch_t exetime;
 	atomic64_t page_read_cnt;
+	uint64_t page_zone_read[5];
 	atomic64_t page_write_cnt;
+	uint64_t subpage_write_cnt[21];
+
 	atomic64_t rmw_read_cnt;
 	atomic64_t rmw_write_cnt;
 	atomic64_t gc_cnt;
 	atomic64_t gc_erase_cnt;
 	atomic64_t gc_read_cnt;
+	uint64_t gc_page_zone_read[5];
 	atomic64_t gc_write_cnt;
+	uint64_t gc_subpage_write_cnt[21];
+
 	atomic64_t meta_read_cnt;
 	atomic64_t meta_write_cnt;
 	uint64_t time_r_sw;

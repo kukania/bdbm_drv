@@ -663,7 +663,9 @@ void hlm_reqs_pool_relocate_kp (bdbm_llm_req_t* lr, uint64_t new_sp_ofs)
 		lr->fmain.kp_stt[lr->logaddr.ofs] = KP_STT_HOLE;
 		lr->fmain.kp_ptr[lr->logaddr.ofs] = lr->fmain.kp_pad[lr->logaddr.ofs];
 	}
+	lr->logaddr.ofs = new_sp_ofs;
 }
+
 
 void hlm_reqs_pool_write_compaction (
 	bdbm_hlm_req_gc_t* dst, 
@@ -672,7 +674,7 @@ void hlm_reqs_pool_write_compaction (
 {
 	uint64_t dst_loop = 0, dst_kp = 0, src_kp = 0, i = 0;
 	uint64_t nr_punits = np->nr_chips_per_channel * np->nr_channels;
-
+	uint64_t t=0;
 	bdbm_llm_req_t* dst_r = NULL;
 	bdbm_llm_req_t* src_r = NULL;
 
@@ -694,6 +696,8 @@ void hlm_reqs_pool_write_compaction (
 				((int64_t*)dst_r->foob.data)[dst_kp] = ((int64_t*)src_r->foob.data)[src_kp];
 			} else {
 				/* otherwise, skip it */
+				bdbm_msg("KP_STT_HOLE %lld", src_kp);
+				t++;
 				continue;
 			}
 
@@ -704,9 +708,11 @@ void hlm_reqs_pool_write_compaction (
 				dst_loop++;
 				dst_r++;
 				dst->nr_llm_reqs++;
+				
 			}
 		}
 	}
+	bdbm_msg("%lld",(t*100*100)/(nr_punits*np->nr_pages_per_block*np->nr_subpages_per_page));
 
 	for (i = 0; i < nr_punits * np->nr_pages_per_block; i++)
 		hlm_reqs_pool_alloc_fmain_pad (&dst->llm_reqs[i].fmain);

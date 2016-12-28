@@ -140,8 +140,9 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 		  for(i = 0; i < r->nr_valid ; i++) {
 			  if(r->logaddr.lpa[i] == -1) continue;
 			  bdbm_bug_on (r->fmain.kp_stt[i] != KP_STT_DATA);
-			  p->oob_data[idx + i + ofs] = r->logaddr.lpa[i];
-			  /*printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
+			  p->oob_data[idx + ofs + i] = r->logaddr.lpa[i];
+			 // bdbm_msg("dm offset %lld, lpa %lld", idx+ofs+i, r->logaddr.lpa[i]);
+			/*  printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
 					  r->logaddr.lpa[i],
 					  r->phyaddr.channel_no,
 					  r->phyaddr.chip_no,
@@ -149,16 +150,19 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
 					  r->phyaddr.page_no,
 					  r->phyaddr.punit_id,
 					  ofs+i,
-					  r->fmain.kp_ptr[i]); 
-				*/
+					  i,r->fmain.kp_ptr[i]); 
+			*/	
 		  }
 
     }else if(bdbm_is_read(r->req_type)){
         for (i = 0; i < BDBM_MAX_PAGES; i++){
             if(r->fmain.kp_stt[i] == KP_STT_DATA){
+			//	bdbm_msg("dm read offset %lld, lpa %lld", idx+i, p->oob_data[idx+i]);
                 ((uint64_t*)r->foob.data)[i] = p->oob_data[idx + i];
 				//must add offset info
-              /*  printf("DUMMY_READ: \n");
+				
+              //  printf("DUMMY_READ: \n");
+				/*
                 printf("logaddr=%d :ch=%d, chip=%d, blk=%d, page=%d, punit=%d, off=%d, fmain[%d]=%p\n",
                         p->oob_data[idx + i],
                         r->phyaddr.channel_no,
@@ -168,12 +172,14 @@ uint32_t dm_user_make_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* ptr_llm_req)
                         r->phyaddr.punit_id,
 						i,
                         i, r->fmain.kp_ptr[i]);
-						*/
+						
+			*/
             //    printf("END_DUMMY_READ: \n");
             }
         }
 
     }
+//	bdbm_msg("dm end");
     bdbm_spin_unlock (&p->dm_lock);
 
     dm_user_end_req (bdi, ptr_llm_req);

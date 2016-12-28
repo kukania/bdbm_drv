@@ -114,11 +114,10 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	bdbm_blkio_req_t* br =(bdbm_blkio_req_t*)hr->blkio_req[0]; //must be changed!
 
 	//hr->llm_reqs[0].subpage_ofs = hr->subpage_ofs;
-	hr->llm_reqs[0].nr_valid = hr->page_size;
 
 	/* perform mapping with the FTL */
 	bdbm_hlm_for_each_llm_req (lr, hr, i) {
-	//	bdbm_msg("hlm_for_each_llm_req : %lld",i);
+//		bdbm_msg("hlm_for_each_llm_req : %lld",i);
 		/* (1) get the physical locations through the FTL */
 		if (bdbm_is_normal (lr->req_type)) {
 			/* handling normal I/O operations */
@@ -129,15 +128,13 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 					lr->req_type = REQTYPE_READ_DUMMY;
 					bdbm_msg("dummy READ");
 				} else {
-					read_cnt[lr->phyaddr.page_no %7]++;
 					hlm_reqs_pool_relocate_kp (lr, sp_ofs);
 				}
 			} else if (bdbm_is_write (lr->req_type)) {
-				if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], &lr->phyaddr,&sp_ofs) != 0) {
+				if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], &lr->phyaddr,lr) != 0) {
 					bdbm_error ("`ftl->get_free_ppa' failed");
 					goto fail;
 				}
-				lr->subpage_ofs = sp_ofs;
 				if (ftl->map_lpa_to_ppa (bdi, &lr->logaddr, &lr->phyaddr, lr) != 0) {
 					bdbm_error ("`ftl->map_lpa_to_ppa' failed");
 					goto fail;
@@ -147,6 +144,7 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 				bdbm_bug_on (1);
 			}
 		} else if (bdbm_is_rmw (lr->req_type)) {
+			bdbm_msg("rmwrmwmrwmrmwrmwrmwrmwrmwmrmwrmwrmwmrwmrwmrmwrmwmrmwmwrmrw");
 			bdbm_phyaddr_t* phyaddr = &lr->phyaddr_src;
 
 			/* finding the location of the previous data */ 
@@ -160,7 +158,7 @@ uint32_t __hlm_nobuf_make_rw_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 			}
 
 			/* getting the location to which data will be written */
-			if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], phyaddr, &sp_ofs) != 0) {
+			if (ftl->get_free_ppa (bdi, lr->logaddr.lpa[0], phyaddr, lr) != 0) {
 				bdbm_error ("`ftl->get_free_ppa' failed");
 				goto fail;
 			}
@@ -285,7 +283,8 @@ uint32_t hlm_nobuf_make_req (bdbm_drv_info_t* bdi, bdbm_hlm_req_t* hr)
 	} else {
 		/* do we need to do garbage collection? */
 
-		__hlm_nobuf_check_ondemand_gc (bdi, hr);   
+	//	__hlm_nobuf_check_ondemand_gc (bdi, hr);   
+
 	
 		
 		ret = __hlm_nobuf_make_rw_req (bdi, hr);
@@ -322,9 +321,11 @@ void __hlm_nobuf_end_gcio_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* lr)
 	atomic64_inc (&hr_gc->nr_llm_reqs_done);
 	lr->req_type |= REQTYPE_DONE;
 
+	/*
 	if (atomic64_read (&hr_gc->nr_llm_reqs_done) == hr_gc->nr_llm_reqs) {
 		bdbm_sema_unlock (&hr_gc->done);
 	}
+	*/
 }
 
 void hlm_nobuf_end_req (bdbm_drv_info_t* bdi, bdbm_llm_req_t* lr)

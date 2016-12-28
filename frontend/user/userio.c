@@ -126,6 +126,31 @@ void userio_close (bdbm_drv_info_t* bdi)
 }
 
 
+/* TODO: it must be more general... */
+void __host_check_ondemand_gc (bdbm_drv_info_t* bdi)
+{
+	bdbm_ftl_params* dp = BDBM_GET_DRIVER_PARAMS (bdi);
+	bdbm_ftl_inf_t* ftl = (bdbm_ftl_inf_t*)BDBM_GET_FTL_INF(bdi);
+
+	if (dp->mapping_type == MAPPING_POLICY_PAGE) {
+		uint32_t loop;
+		/* see if foreground GC is needed or not */
+		for (loop = 0; loop < 10; loop++) {
+			if (ftl->is_gc_needed != NULL && 
+				ftl->is_gc_needed (bdi, 0)) {
+				/* perform GC before sending requests */ 
+			//	bdbm_msg ("[host_make_req] trigger GC");
+				ftl->do_gc (bdi, 0);
+			} else
+				break;
+		}
+	} else {
+		bdbm_msg("ondemand gc error");
+		/* do nothing */
+	}
+}
+
+
 
 void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 {
@@ -166,9 +191,10 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 	} else if(br->bi_rw == REQTYPE_WRITE) {
 		while(1) 
 		{
+			__host_check_ondemand_gc(bdi);
+
 			req_size = hr->nr_charged + (br->bi_bvec_cnt - br->bi_bvec_index);
 			hr->page_size = bdi->ptr_ftl_inf->get_next_ppa(bdi); // 16K,12K,8K,4K...       80K support
-			bdbm_msg("userio_buf_make_req subpage_size %lld", hr->page_size);
 			if(req_size <= hr->page_size) 
 			{
 //				bdbm_msg("req_size %lld", req_size);

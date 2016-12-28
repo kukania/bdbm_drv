@@ -400,9 +400,9 @@ int main (int argc, char** argv)
 
 
 				
-                printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
+               // printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
                 if(offset >= limit){
-						printf("offset >= limit\n");
+				//	printf("offset >= limit\n");
                         continue;
 				}
 
@@ -441,15 +441,7 @@ int main (int argc, char** argv)
 		printf("%d write: %lld\n", 4*nr, write_cnt[nr]);
 		*/
 
-		nr = 20;
-		printf("%dKB write %lld\n", 4*nr, write_cnt[nr]);
-
-		printf("16KB ZONE read %lld\n", read_cnt[0]+read_cnt[1]+read_cnt[2]);
-		printf("12KB ZONE read %lld\n", read_cnt[3]);
-		printf("8KB ZONE read %lld\n", read_cnt[4]+read_cnt[5]);
-		printf("4KB ZONE read %lld\n", read_cnt[6]);
-		
-        bdbm_msg ("[main] done");
+	        bdbm_msg ("[main] done");
 
         return 0;
 }
@@ -489,9 +481,9 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 				//bdbm_msg("p->nr_host_reqs %llu [write_tracefile]",p->nr_host_reqs);
 
 
-//              bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+             // bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
                 _bdi->ptr_host_inf->make_req (_bdi, blkio_req);
-				//bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
+			//	bdbm_sema_lock ((bdbm_sema_t*)blkio_req->user2);
 
 
 //				bdbm_msg("host_inf->make_req done");
