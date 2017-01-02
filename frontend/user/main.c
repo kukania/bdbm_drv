@@ -75,7 +75,7 @@ uint64_t  write_cnt[21];
 static int w_cnt = 0;
 
 void* host_thread_fn_read_tracefile (size_t offset, int size);
-void* host_thread_fn_write_tracefile (size_t offset, int size);
+void* host_thread_fn_write_tracefile (size_t offset, int size, int is_sync);
 
 void write_done (void* req)
 {
@@ -418,7 +418,10 @@ int main (int argc, char** argv)
 				*/
 				
                 if(ops[0] == 'W'){
-                        host_thread_fn_write_tracefile (offset, size);
+					if(ops[1] == 'S')
+                        host_thread_fn_write_tracefile (offset, size,1);
+					else
+						host_thread_fn_write_tracefile(offset, size, 0);
                 }
                 else if(ops[0] == 'R'){
                         host_thread_fn_read_tracefile (offset, size);
@@ -446,7 +449,7 @@ int main (int argc, char** argv)
         return 0;
 }
 
-void* host_thread_fn_write_tracefile (size_t offset, int size) 
+void* host_thread_fn_write_tracefile (size_t offset, int size, int is_sync) 
 {
         int i = 0;
         uint32_t j = 0;
@@ -457,6 +460,10 @@ void* host_thread_fn_write_tracefile (size_t offset, int size)
 
                 bdbm_blkio_req_t* blkio_req = (bdbm_blkio_req_t*)bdbm_malloc (sizeof (bdbm_blkio_req_t));
 
+				if(is_sync == 1)
+					blkio_req->is_sync = 1;
+				else
+					blkio_req->is_sync = 0;
                 /* build blkio req */
                 blkio_req->bi_rw = REQTYPE_WRITE;
                 blkio_req->bi_offset = offset;

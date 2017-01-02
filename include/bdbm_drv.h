@@ -99,6 +99,7 @@ enum BDBM_REQTYPE {
 	REQTYPE_RMW 			= 0x000200,
 	REQTYPE_GC 				= 0x000400,
 	REQTYPE_META 			= 0x000800,
+	REQTYPE_SYNC			= 0x001000,
 
 	REQTYPE_READ 			= REQTYPE_NORNAL 	| REQTYPE_IO_READ,
 	REQTYPE_READ_DUMMY 		= REQTYPE_NORNAL 	| REQTYPE_IO_READ_DUMMY,
@@ -150,6 +151,7 @@ typedef struct {
 	
 	atomic64_t reqs_done; //number of done request count
 
+	uint32_t is_sync; // sync request
 	uint8_t ret; /* a return value will be kept here */
 	void* bio; /* reserved for kernel's bio requests */
 	void* user; /* keep user's data structure */

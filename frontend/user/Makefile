@@ -30,7 +30,7 @@ LIBFTL := libftl.a
 SRCS := \
 	main.c \
 
-libftl: $(SRCS) $(DMLIB) $(LIBFTL)
+rio : $(SRCS) $(DMLIB) $(LIBFTL)
 	$(CC) $(INCLUDES) $(CFLAGS) -o $@ $(SRCS) $(LIBS) $(LIBFTL) $(DMLIB)
 
 clean:

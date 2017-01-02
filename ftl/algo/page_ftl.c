@@ -50,7 +50,7 @@ THE SOFTWARE.
 
 /*#define DEBUG_HONG*/
 
-int32_t subpage_size[] = {20};  
+int32_t subpage_size[] = {20}; 
 uint32_t ofs;
 
 /* FTL interface */

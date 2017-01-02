@@ -516,13 +516,13 @@ void pmu_display (bdbm_drv_info_t* bdi)
 		atomic64_read (&bdi->pm.gc_write_cnt) +
 		atomic64_read (&bdi->pm.meta_write_cnt)
 	);
-	/* for RIO-IMP
+	/* for RIO-IMP*/
 	for(i=4; i>0; i--) {
 		bdbm_msg("	# of %ldKB page write: %ld", i*4,
 				bdi->pm.subpage_write_cnt[i] +
 				bdi->pm.gc_subpage_write_cnt[i] );
 	}
-	*/
+	
 	bdbm_msg ("# of block erase: %ld", 
 		atomic64_read (&bdi->pm.gc_erase_cnt));
 	bdbm_msg ("");
@@ -536,11 +536,11 @@ void pmu_display (bdbm_drv_info_t* bdi)
 	bdbm_msg ("# of page writes: %ld", 
 		atomic64_read (&bdi->pm.page_write_cnt));
 
-	/* for RIO-IMP
+	/* for RIO-IMP*/
 	for(i=4; i>0; i--) {
 		bdbm_msg("	# of %ldKB page writes: %ld",i*4, bdi->pm.subpage_write_cnt[i]);
 	}
-	*/
+	
 	bdbm_msg ("# of page rmw reads: %ld", 
 		atomic64_read (&bdi->pm.rmw_read_cnt));
 	bdbm_msg ("# of page rmw writes: %ld", 
@@ -560,11 +560,11 @@ void pmu_display (bdbm_drv_info_t* bdi)
 		atomic64_read (&bdi->pm.gc_write_cnt));
 	
 	
-	/* for RIO-IMP
+	/* for RIO-IMP*/
 	for(i=4; i>0; i--) {
 		bdbm_msg("	# of %ldKB page writes: %ld",i*4, bdi->pm.gc_subpage_write_cnt[i]);
 	}
-	*/
+	
 	
 	bdbm_msg ("# of block erase: %ld", 
 		atomic64_read (&bdi->pm.gc_erase_cnt));

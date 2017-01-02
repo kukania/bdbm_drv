@@ -6,6 +6,7 @@
 *.so
 libftl
 
+rio*
 *.txt
 *.in
 *.debug

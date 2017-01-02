@@ -203,7 +203,6 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 				br->bi_offset += 8*ret;
 				hr-> hlm_number = loop;
 				if(req_size == hr->page_size) {
-					write_cnt[hr->page_size]++;	
 					if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 						bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 					}
@@ -216,11 +215,19 @@ void userio_buf_make_req(bdbm_drv_info_t* bdi, void* bio)
 			br->bi_bvec_index +=ret;
 			br->bi_offset += 8*ret;
 			hr-> hlm_number = loop;
-			write_cnt[hr->page_size]++;
 			if(bdi->ptr_hlm_inf->make_req(bdi, hr) !=0) {
 				bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
 			}
 			hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
+		}
+	
+		if(hr->nr_charged !=0) {
+			if(br->is_sync == 1) {
+				if(bdi->ptr_hlm_inf->make_req(bdi,hr) !=0) {
+					bdbm_error("'bdi->ptr_hlm_inf->make_req' failed");
+				}
+				hr = bdbm_hlm_reqs_pool_get_item(p->hlm_reqs_pool);
+			}
 		}
 
 	}
