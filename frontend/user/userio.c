@@ -139,7 +139,7 @@ void __host_check_ondemand_gc (bdbm_drv_info_t* bdi)
 			if (ftl->is_gc_needed != NULL && 
 				ftl->is_gc_needed (bdi, 0)) {
 				/* perform GC before sending requests */ 
-			//	bdbm_msg ("[host_make_req] trigger GC");
+				bdbm_msg ("[host_make_req] trigger GC");
 				ftl->do_gc (bdi, 0);
 			} else
 				break;

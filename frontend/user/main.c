@@ -400,8 +400,8 @@ int main (int argc, char** argv)
 
 
 				
-               // printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
-                if(offset >= limit){
+                //printf("%s,%zu,%d, [%d]\n",  ops, offset, size, w_cnt);
+                if(offset + size  >= limit){
 				//	printf("offset >= limit\n");
                         continue;
 				}

@@ -50,7 +50,7 @@ THE SOFTWARE.
 
 /*#define DEBUG_HONG*/
 
-int32_t subpage_size[] = {20}; 
+int32_t subpage_size[] = {4,4,4,3,2,2,1}; 
 uint32_t ofs;
 
 /* FTL interface */
@@ -820,6 +820,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 	uint64_t nr_gc_blks = 0;
 	uint64_t nr_llm_reqs = 0;
 	uint64_t nr_punits = 0;
+	uint64_t nr_valid_page = 0;
 	uint64_t i, j, k;
 	bdbm_stopwatch_t sw;
 
@@ -988,7 +989,7 @@ uint32_t bdbm_page_ftl_do_gc (bdbm_drv_info_t* bdi, int64_t lpa)
 		}
 	}
 
-	//if no send write request, send
+	//if not send write request, send
 	if(dst_kp !=0 ) {
 
 		for(;dst_kp < nr_subpages; dst_kp++) {

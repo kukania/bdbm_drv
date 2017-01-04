@@ -117,7 +117,7 @@ bdbm_abm_info_t* bdbm_abm_create (
 
 	/* create 'bdbm_abm_info' */
 	if ((bai = (bdbm_abm_info_t*)bdbm_zmalloc (sizeof (bdbm_abm_info_t))) == NULL) {
-		bdbm_error ("bdbm_zmalloc fbailed");
+		bdbm_error ("bdbm_zmalloc failed");
 		return NULL;
 	}
 	bai->np = np;
