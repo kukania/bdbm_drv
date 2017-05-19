@@ -77,6 +77,7 @@ static int w_cnt = 0;
 void* host_thread_fn_read_tracefile (size_t offset, int size);
 void* host_thread_fn_write_tracefile (size_t offset, int size, int is_sync);
 
+
 void write_done (void* req)
 {
 	uint32_t j = 0;

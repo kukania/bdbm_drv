@@ -41,7 +41,6 @@ uint32_t bdbm_page_ftl_load (bdbm_drv_info_t* bdi, const char* fn);
 uint32_t bdbm_page_ftl_store (bdbm_drv_info_t* bdi, const char* fn);
 #endif
 
-typedef struct bdbm_page_ftl_private_t bdbm_page_ftl_private_t;
 uint32_t bdbm_page_ftl_create (bdbm_drv_info_t* bdi);
 void bdbm_page_ftl_destroy (bdbm_drv_info_t* bdi);
 uint32_t bdbm_page_ftl_tell_subpage_size(bdbm_drv_info_t* bdi);

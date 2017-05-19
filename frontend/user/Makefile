@@ -14,6 +14,7 @@ INCLUDES = -I$(PWD)/$(INCLUDE) \
 		   -I$(PWD)/$(COMMON)/utils \
 		   -I$(PWD)/$(COMMON)/3rd \
 		   -I$(PWD)/$(FTL) \
+		   -I$(PWD)/$(FTL)/lsmtree \
 		   -I$(PWD)/$(DM_COMMON) \
 
 CFLAGS += -D HASH_BLOOM=20 \
